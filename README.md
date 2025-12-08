@@ -9,3 +9,4 @@ Iespēja pieslēgties plānotājam no aplikācijas uz mobilās ierīces.
 
 ### Hello
 # md faili
+Sveiki
