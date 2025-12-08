@@ -2,6 +2,6 @@ import java.util.Scanner;
 
 public class Java {
     public static void main(String[] args) {
-        System.out.println("Lalala");
+        Scanner scanner = new Scanner(System.in);
     }
 }
