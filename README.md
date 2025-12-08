@@ -7,3 +7,5 @@ Rādīt nedēļas dienu (pirmdiena, otrdiena, trešdiena…) blakus datumam.
 Iespēja saskaņot plānus ar citiem litotājiem, automātiski salīdzinot, kuras dienas ir brīvas un kuras aizņemtas, kā arī, iespējams, ņemot vērā “notikumu” prioritātes, lai atrastu dienu, kurā abi / visi varētu satikties vai kaut ko kopā iesākt.
 Iespēja pieslēgties plānotājam no aplikācijas uz mobilās ierīces.
 
+### Hello
+# md faili
