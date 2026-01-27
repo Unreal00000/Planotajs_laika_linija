@@ -20,12 +20,12 @@ Iespēja pieslēgties plānotājam no aplikācijas uz mobilās ierīces.
 | Konceptuālais modelis | ![img.png](img.png) |
 |:---------------------:|:------------|
 
-|  Nedēļa  | Uzdevums  |  Darītājs  |
-|:--------:|:----------|:----------:|
-|    #1    |           |   Mārcis   |
-|    #1    |           |  Roberts   |
-|    #2    |           |   Mārcis   |
-|    #2    |           |  Roberts   |
+|     Nedēļa      | Uzdevums  | Darītājs |
+|:---------------:|:----------|:--------:|
+| 02.02. - 08.02. |           |  Mārcis  |
+| 02.02. - 08.02. |           |  Roberts |
+| 09.02. - 15.02. |           |  Mārcis  |
+| 09.02. - 15.02. |           | Roberts  |
 
 ### Hello
 # md faili
