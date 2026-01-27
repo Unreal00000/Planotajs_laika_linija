@@ -51,7 +51,6 @@ Iespēja pieslēgties plānotājam no aplikācijas uz mobilās ierīces.
 |  #14   | 04.05. - 08.05. |           |  Mārcis  |
 |  #14   | 04.05. - 08.05. |           | Roberts  |
 
-
 ### Hello
 # md faili
 Sveiki
