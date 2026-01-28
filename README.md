@@ -1,7 +1,12 @@
-|  Vārds  |   Uzvārds   |
-|:-------:|:-----------:|
-| Mārcis  | Aizpurietis |
-| Roberts |    Smila    |
+| **Vārds** | **Uzvārds** |
+|:---------:|:-----------:|
+|  Mārcis   | Aizpurietis |
+|  Roberts  |    Smila    |
+
+| **Formāts:** | Mobilā tīkla lietotne |
+|--------------|-----------------------|
+
+## Apraksts
 
 Mācības skolā un paralēlas aktivitātes nozīmē lielu daudzumu darbu un uzdevumu, kam jāatvēl un jāieplāno laiks. Lai šiem darbiem varētu vienkārši izsekot, mēs plānojam izstrādāt plānotāja web-aplikāciju ar parocīgām funkcijām.
 Plānotājs būtu pieejams no interneta pārlūka, lietotājam pieslēzoties ar lietotājvārdu un paroli. Tas ļautu lietotājam pievienot “notikumus” ar noteiktu datumu, “apzīmētāju” un aprakstu. Galvenokārt visus “notikumus” būtu iespējams aplūkot secīgi pēc to datumiem, bet, ja datuma aile tiktu atstāta tukša, “notikums” tiktu attēlots atsevišķi no pārējā saraksta, kā uzdevums, kas veicams steidzami / neatkarīgi no datuma. Izvēloties “apzīmētāju” lietotājam būtu opcija izveidot jaunu “apzīmētāju” vai izvēlēties kādu no esošajiem, iepriekš izgatavotajiem “apzīmētājiem”. “Notikuma” “apzīmētājs” norādā, kādā kategorijā “notikums” ietilpst, un sastāvētu no teksta un vienas krāsas atvieglotai atpazīstamībai, kā, piemēram, 🔴Pārbaudes darbs vai 🔵Tikšanās. Lietotājam tiktu dota iespēja “filtrēt” notikumus pēc to “apzīmētājiem”, lai redzētu tikai tuvākos pārbaudes darbus vai tuvākās tikšanās, kā jau minēts, datumu secībā. Visbeidzot “notikumus” būtu iespējams noņemt no saraksta vai nu manuāli, vai arī sagaidot, kad atzīmētais datums būs pagājis. Noņemtie “notikumi” tiktu novietoti atsevišķā sarakstā - atkritnē / arhīvā -, kas lietotājam arī būtu pieejams.
@@ -12,45 +17,43 @@ Rādīt nedēļas dienu (pirmdiena, otrdiena, trešdiena…) blakus datumam.
 Iespēja saskaņot plānus ar citiem litotājiem, automātiski salīdzinot, kuras dienas ir brīvas un kuras aizņemtas, kā arī, iespējams, ņemot vērā “notikumu” prioritātes, lai atrastu dienu, kurā abi / visi varētu satikties vai kaut ko kopā iesākt.
 Iespēja pieslēgties plānotājam no aplikācijas uz mobilās ierīces.
 
-| Izmantotās tehnoloģijas |
-|:------------------------|
-| Šis                     |
-| Tas                     |
+## Darba plāns
 
-| Konceptuālais modelis | ![img.png](img.png) |
-|:---------------------:|:------------|
+| **Izmantotās tehnoloģijas** |
+|:----------------------------|
+| Šis                         |
+| Tas                         |
 
-| Nedēļa |     Datums      | Uzdevums  | Darītājs |
-|:------:|:---------------:|:----------|:--------:|
-|   #1   | 02.02. - 08.02. |           |  Mārcis  |
-|   #1   | 02.02. - 08.02. |           | Roberts  |
-|   #2   | 09.02. - 15.02. |           |  Mārcis  |
-|   #2   | 09.02. - 15.02. |           | Roberts  |
-|   #3   | 16.02. - 22.02. |           |  Mārcis  |
-|   #3   | 16.02. - 22.02. |           | Roberts  |
-|   #4   | 23.02. - 01.03. |           |  Mārcis  |
-|   #4   | 23.02. - 01.03. |           | Roberts  |
-|   #5   | 02.03. - 08.03. |           |  Mārcis  |
-|   #5   | 02.03. - 08.03. |           | Roberts  |
-|   #6   | 09.03. - 15.03. |           |  Mārcis  |
-|   #6   | 09.03. - 15.03. |           | Roberts  |
-|   #7   | 16.03. - 22.03. |           |  Mārcis  |
-|   #7   | 16.03. - 22.03. |           | Roberts  |
-|   #8   | 23.03. - 29.03. |           |  Mārcis  |
-|   #8   | 23.03. - 29.03. |           | Roberts  |
-|   #9   | 30.03. - 05.04. |           |  Mārcis  |
-|   #9   | 30.03. - 05.04. |           | Roberts  |
-|  #10   | 06.04. - 12.04. |           |  Mārcis  |
-|  #10   | 06.04. - 12.04. |           | Roberts  |
-|  #11   | 13.04. - 19.04. |           |  Mārcis  |
-|  #11   | 13.04. - 19.04. |           | Roberts  |
-|  #12   | 20.04. - 26.04. |           |  Mārcis  |
-|  #12   | 20.04. - 26.04. |           | Roberts  |
-|  #13   | 27.04. - 03.05. |           |  Mārcis  |
-|  #13   | 27.04. - 03.05. |           | Roberts  |
-|  #14   | 04.05. - 08.05. |           |  Mārcis  |
-|  #14   | 04.05. - 08.05. |           | Roberts  |
+| **Konceptuālais modelis:** | ![Sequence_diagram](Konceptuālais_modelis_1.png) |
+|:--------------------------:|:-----------------------|
 
-### Hello
-# md faili
-Sveiki
+| **Nedēļa** |   **Datums**    | **Uzdevums**                             | **Darītājs** |
+|:----------:|:---------------:|:-----------------------------------------|:------------:|
+|     #1     | 02.02. - 08.02. | Iepazīties ar izmantotajām tehnoloģijām. |    Mārcis    |
+|     #1     | 02.02. - 08.02. | Iepazīties ar izmantotajām tehnoloģijām. |   Roberts    |
+|     #2     | 09.02. - 15.02. |                                          |    Mārcis    |
+|     #2     | 09.02. - 15.02. |                                          |   Roberts    |
+|     #3     | 16.02. - 22.02. |                                          |    Mārcis    |
+|     #3     | 16.02. - 22.02. |                                          |   Roberts    |
+|     #4     | 23.02. - 01.03. |                                          |    Mārcis    |
+|     #4     | 23.02. - 01.03. |                                          |   Roberts    |
+|     #5     | 02.03. - 08.03. |                                          |    Mārcis    |
+|     #5     | 02.03. - 08.03. |                                          |   Roberts    |
+|     #6     | 09.03. - 15.03. |                                          |    Mārcis    |
+|     #6     | 09.03. - 15.03. |                                          |   Roberts    |
+|     #7     | 16.03. - 22.03. |                                          |    Mārcis    |
+|     #7     | 16.03. - 22.03. |                                          |   Roberts    |
+|     #8     | 23.03. - 29.03. |                                          |    Mārcis    |
+|     #8     | 23.03. - 29.03. |                                          |   Roberts    |
+|     #9     | 30.03. - 05.04. |                                          |    Mārcis    |
+|     #9     | 30.03. - 05.04. |                                          |   Roberts    |
+|    #10     | 06.04. - 12.04. |                                          |    Mārcis    |
+|    #10     | 06.04. - 12.04. |                                          |   Roberts    |
+|    #11     | 13.04. - 19.04. |                                          |    Mārcis    |
+|    #11     | 13.04. - 19.04. |                                          |   Roberts    |
+|    #12     | 20.04. - 26.04. |                                          |    Mārcis    |
+|    #12     | 20.04. - 26.04. |                                          |   Roberts    |
+|    #13     | 27.04. - 03.05. |                                          |    Mārcis    |
+|    #13     | 27.04. - 03.05. |                                          |   Roberts    |
+|    #14     | 04.05. - 08.05. |                                          |    Mārcis    |
+|    #14     | 04.05. - 08.05. |                                          |   Roberts    |
