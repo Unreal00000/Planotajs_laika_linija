@@ -3,7 +3,7 @@
 |  Mārcis   | Aizpurietis |
 |  Roberts  |    Smila    |
 
-| **Formāts:** | Mobilā tīkla lietotne |
+| **Formāts:** | Mobilā (tīkla) lietotne |
 |--------------|-----------------------|
 
 ## Apraksts
