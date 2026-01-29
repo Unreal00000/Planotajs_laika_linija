@@ -25,35 +25,35 @@ Iespēja pieslēgties plānotājam no aplikācijas uz mobilās ierīces.
 | Tas                         |
 
 | **Konceptuālais modelis:** | ![Sequence_diagram](Konceptuālais_modelis_1.png) |
-|:--------------------------:|:-----------------------|
+|:--------------------------:|:-------------------------------------------------|
 
-| **Nedēļa** |   **Datums**    | **Uzdevums**                             | **Darītājs** |
-|:----------:|:---------------:|:-----------------------------------------|:------------:|
-|     #1     | 02.02. - 08.02. | Iepazīties ar izmantotajām tehnoloģijām. |    Mārcis    |
-|     #1     | 02.02. - 08.02. | Iepazīties ar izmantotajām tehnoloģijām. |   Roberts    |
-|     #2     | 09.02. - 15.02. |                                          |    Mārcis    |
-|     #2     | 09.02. - 15.02. |                                          |   Roberts    |
-|     #3     | 16.02. - 22.02. |                                          |    Mārcis    |
-|     #3     | 16.02. - 22.02. |                                          |   Roberts    |
-|     #4     | 23.02. - 01.03. |                                          |    Mārcis    |
-|     #4     | 23.02. - 01.03. |                                          |   Roberts    |
-|     #5     | 02.03. - 08.03. |                                          |    Mārcis    |
-|     #5     | 02.03. - 08.03. |                                          |   Roberts    |
-|     #6     | 09.03. - 15.03. |                                          |    Mārcis    |
-|     #6     | 09.03. - 15.03. |                                          |   Roberts    |
-|     #7     | 16.03. - 22.03. |                                          |    Mārcis    |
-|     #7     | 16.03. - 22.03. |                                          |   Roberts    |
-|     #8     | 23.03. - 29.03. |                                          |    Mārcis    |
-|     #8     | 23.03. - 29.03. |                                          |   Roberts    |
-|     #9     | 30.03. - 05.04. |                                          |    Mārcis    |
-|     #9     | 30.03. - 05.04. |                                          |   Roberts    |
-|    #10     | 06.04. - 12.04. |                                          |    Mārcis    |
-|    #10     | 06.04. - 12.04. |                                          |   Roberts    |
-|    #11     | 13.04. - 19.04. |                                          |    Mārcis    |
-|    #11     | 13.04. - 19.04. |                                          |   Roberts    |
-|    #12     | 20.04. - 26.04. |                                          |    Mārcis    |
-|    #12     | 20.04. - 26.04. |                                          |   Roberts    |
-|    #13     | 27.04. - 03.05. |                                          |    Mārcis    |
-|    #13     | 27.04. - 03.05. |                                          |   Roberts    |
-|    #14     | 04.05. - 08.05. |                                          |    Mārcis    |
-|    #14     | 04.05. - 08.05. |                                          |   Roberts    |
+| **Nedēļa** |   **Datums**    | **Uzdevums**                                                                                                               | **Darītājs** |
+|:----------:|:---------------:|:---------------------------------------------------------------------------------------------------------------------------|:------------:|
+|     #1     | 02.02. - 08.02. | Iepazīties ar izmantotajām tehnoloģijām, izveidojot vienkāršu komunikācijas ķēdi starp visiem iesaistītajiem dalībniekiem. |    Mārcis    |
+|     #1     | 02.02. - 08.02. | Iepazīties ar izmantotajām tehnoloģijām, izveidojot vienkāršu komunikācijas ķēdi starp visiem iesaistītajiem dalībniekiem. |   Roberts    |
+|     #2     | 09.02. - 15.02. | Izstrādāt vienkāršu saskarni, laika līnijas un aktuālo notikumu ailes vizuālo uzmetumu.                                    |    Mārcis    |
+|     #2     | 09.02. - 15.02. | Izstrādāt vienkāršu saskarni, laika līnijas un aktuālo notikumu ailes vizuālo uzmetumu.                                    |   Roberts    |
+|     #3     | 16.02. - 22.02. | Pievienot filtru un funkciju paneļa vizuālo uzmetumu.                                                                      |    Mārcis    |
+|     #3     | 16.02. - 22.02. | Pievienot filtru un funkciju paneļa vizuālo uzmetumu.                                                                      |   Roberts    |
+|     #4     | 23.02. - 01.03. | Izstrādāt notikumu pievienošanas un izdzēšanas funkciju, neiekļaujot apzīmētājus.                                          |    Mārcis    |
+|     #4     | 23.02. - 01.03. | Izstrādāt notikumu pievienošanas un izdzēšanas funkciju, neiekļaujot apzīmētājus.                                          |   Roberts    |
+|     #5     | 02.03. - 08.03. | Izstrādāt apzīmētāju pievienošanas un izdzēšanas funkciju.                                                                 |    Mārcis    |
+|     #5     | 02.03. - 08.03. | Izstrādāt apzīmētāju pievienošanas un izdzēšanas funkciju.                                                                 |   Roberts    |
+|     #6     | 09.03. - 15.03. | Pievienot apzīmētājus notikumu pievienošanas funkcijai.                                                                    |    Mārcis    |
+|     #6     | 09.03. - 15.03. | Pievienot apzīmētājus notikumu pievienošanas funkcijai.                                                                    |   Roberts    |
+|     #7     | 16.03. - 22.03. | Izstrādāt notikumu filtrēšanas funkciju pēc datuma un apzīmētāja.                                                          |    Mārcis    |
+|     #7     | 16.03. - 22.03. | Izstrādāt notikumu filtrēšanas funkciju pēc datuma un apzīmētāja.                                                          |   Roberts    |
+|     #8     | 23.03. - 29.03. | Izstrādāt reģistrācijas saskarni.                                                                                          |    Mārcis    |
+|     #8     | 23.03. - 29.03. | Izstrādāt reģistrācijas saskarni.                                                                                          |   Roberts    |
+|     #9     | 30.03. - 05.04. | Pievienot Google reģistrāciju / autentifikāciju.                                                                           |    Mārcis    |
+|     #9     | 30.03. - 05.04. | Pievienot Google reģistrāciju / autentifikāciju.                                                                           |   Roberts    |
+|    #10     | 06.04. - 12.04. | Pielāgot saskarni mobilajām ierīcēm.                                                                                       |    Mārcis    |
+|    #10     | 06.04. - 12.04. | Pielāgot saskarni mobilajām ierīcēm.                                                                                       |   Roberts    |
+|    #11     | 13.04. - 19.04. | "Noslīpēt" lietotni veicot smalkas vizuālās izmaiņas saskarnē, lai to padarītu ērtāku lietošanai.                          |    Mārcis    |
+|    #11     | 13.04. - 19.04. | "Noslīpēt" lietotni veicot smalkas vizuālās izmaiņas saskarnē, lai to padarītu ērtāku lietošanai.                          |   Roberts    |
+|    #12     | 20.04. - 26.04. | Iespējot lietotnes atvēršanu no mobilajām ierīcēm, kā tīkla aplikāciju.                                                    |    Mārcis    |
+|    #12     | 20.04. - 26.04. | Iespējot lietotnes atvēršanu no mobilajām ierīcēm, kā tīkla aplikāciju.                                                    |   Roberts    |
+|    #13     | 27.04. - 03.05. | Veikt testēšanu, izdalot lietotājiem lietotni, veicot uzlabojumus un labojot kļūdas, ja nepieciešams.                      |    Mārcis    |
+|    #13     | 27.04. - 03.05. | Veikt testēšanu, izdalot lietotājiem lietotni, veicot uzlabojumus un labojot kļūdas, ja nepieciešams.                      |   Roberts    |
+|    #14     | 04.05. - 08.05. | Prezentēt lietotni.                                                                                                        |    Mārcis    |
+|    #14     | 04.05. - 08.05. | Prezentēt lietotni.                                                                                                        |   Roberts    |
