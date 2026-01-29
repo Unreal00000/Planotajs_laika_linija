@@ -53,7 +53,7 @@ Iespēja pieslēgties plānotājam no aplikācijas uz mobilās ierīces.
 |    #11     | 13.04. - 19.04. | "Noslīpēt" lietotni veicot smalkas vizuālās izmaiņas saskarnē, lai to padarītu ērtāku lietošanai.                          |   Roberts    |
 |    #12     | 20.04. - 26.04. | Iespējot lietotnes atvēršanu no mobilajām ierīcēm, kā tīkla aplikāciju.                                                    |    Mārcis    |
 |    #12     | 20.04. - 26.04. | Iespējot lietotnes atvēršanu no mobilajām ierīcēm, kā tīkla aplikāciju.                                                    |   Roberts    |
-|    #13     | 27.04. - 03.05. | Veikt testēšanu, izdalot lietotājiem lietotni, veicot uzlabojumus un labojot kļūdas, ja nepieciešams.                      |    Mārcis    |
-|    #13     | 27.04. - 03.05. | Veikt testēšanu, izdalot lietotājiem lietotni, veicot uzlabojumus un labojot kļūdas, ja nepieciešams.                      |   Roberts    |
+|    #13     | 27.04. - 03.05. | Veikt testēšanu, izdalot lietotni lietotājiem, veicot uzlabojumus un labojot kļūdas, ja nepieciešams.                      |    Mārcis    |
+|    #13     | 27.04. - 03.05. | Veikt testēšanu, izdalot lietotni lietotājiem, veicot uzlabojumus un labojot kļūdas, ja nepieciešams.                      |   Roberts    |
 |    #14     | 04.05. - 08.05. | Prezentēt lietotni.                                                                                                        |    Mārcis    |
 |    #14     | 04.05. - 08.05. | Prezentēt lietotni.                                                                                                        |   Roberts    |
