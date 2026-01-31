@@ -19,10 +19,25 @@ Iespēja pieslēgties plānotājam no aplikācijas uz mobilās ierīces.
 
 ## Darba plāns
 
-| **Izmantotās tehnoloģijas** |
-|:----------------------------|
-| Šis                         |
-| Tas                         |
+| **Izmantotās tehnoloģijas**              |
+|:-----------------------------------------|
+| Java                                     |
+| Spring boot 4                            |
+| Spring data JPA                          |
+| H2 database                              |
+| Maven                                    |
+| Spring web                               |
+| HTML                                     |
+| CSS                                      |
+| Javascript                               |
+| Gan jau frontend framewroks (react u.c.) |
+| Rest API                                 |
+| INTELLIJ IDEA                            |
+| MAVEN Wrapper                            |
+| Powershell                               |
+| GIT/GITHUB                               |
+| DOCKER                                   |
+| H2 konsoli                               |
 
 | **Konceptuālais modelis:** | ![Sequence_diagram](Konceptuālais_modelis_1.png) |
 |:--------------------------:|:-------------------------------------------------|
