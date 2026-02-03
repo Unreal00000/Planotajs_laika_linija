@@ -19,25 +19,15 @@ Iespēja pieslēgties plānotājam no aplikācijas uz mobilās ierīces.
 
 ## Darba plāns
 
-| **Izmantotās tehnoloģijas**              |
-|:-----------------------------------------|
-| Java                                     |
-| Spring boot 4                            |
-| Spring data JPA                          |
-| H2 database                              |
-| Maven                                    |
-| Spring web                               |
-| HTML                                     |
-| CSS                                      |
-| Javascript                               |
-| Gan jau frontend framewroks (react u.c.) |
-| Rest API                                 |
-| INTELLIJ IDEA                            |
-| MAVEN Wrapper                            |
-| Powershell                               |
-| GIT/GITHUB                               |
-| DOCKER                                   |
-| H2 konsoli                               |
+| **Izmantotās tehnoloģijas** |
+|:----------------------------|
+| REACT                       |
+| NODEJS                      |
+| WebStorm                    |
+| MySQL?                      |
+| Docker?                     |
+
+
 
 | **Konceptuālais modelis:** | ![Sequence_diagram](Konceptuālais_modelis_1.png) |
 |:--------------------------:|:-------------------------------------------------|
@@ -71,4 +61,10 @@ Iespēja pieslēgties plānotājam no aplikācijas uz mobilās ierīces.
 |    #13     | 27.04. - 03.05. | Veikt testēšanu, izdalot lietotni lietotājiem, veicot uzlabojumus un labojot kļūdas, ja nepieciešams.                      |    Mārcis    |
 |    #13     | 27.04. - 03.05. | Veikt testēšanu, izdalot lietotni lietotājiem, veicot uzlabojumus un labojot kļūdas, ja nepieciešams.                      |   Roberts    |
 |    #14     | 04.05. - 08.05. | Prezentēt lietotni.                                                                                                        |    Mārcis    |
-|    #14     | 04.05. - 08.05. | Prezentēt lietotni.                                                                                                        |   Roberts    |
+|    #14     | 04.05. - 08.05. | Prezentēt lietotni.      <br/>                                                                                                  |   Roberts    |
+
+
+Ko mums vajag?
+1)Saskarne html, css + javascript?
+2)Datubāze - serveris
+3)Loģiskā daļa - javasripot
