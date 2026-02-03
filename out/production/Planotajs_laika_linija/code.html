@@ -1,11 +1,348 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<h1>Taisu izmainas </h1>
-<body>
+    <meta charset="utf-8">
+    <title>Kalkulators</title>
 
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/seven-segment');
+        @font-face {
+            font-family: 'Seven Segment';
+            font-style: normal;
+            font-weight: 400;
+            src: local('Seven Segment'), url('Seven Segment.woff') format('woff');
+        }
+
+
+        .mainBox {display:block; position:absolute; top:18%; left:39%; border:4px solid black; padding:20px; width:400px; height:500px; background-color:rgb(120 120 120); border-radius:20px}
+        .displayBox {display:block; border:2px solid black; height:13%; width:88.8%; background-color:rgb(0 130 60); border-radius:15px;  font-size: 3.5rem; font-family: 'Seven Segment', sans-serif; color:rgb(0 240 60); text-align: right; padding:20px; padding-top:30px; overflow:hidden}
+        .subDisplayBox {display:block; height:4%; width:89%;  font-size: 1.4rem; font-family: 'Seven Segment', sans-serif; color:rgb(0 230 60); text-align: right; overflow:hidden; position:relative; bottom: 22%; left:5%}
+        .buttonBox {display:inline-block; border:2px solid black;border-top-color:rgb(100 100 100);border-left-color:rgb(100 100 100); height:14%; width:33%; background-color:rgb(180 180 180); position:relative; bottom:0.5%; left:2%; margin:2px; font-size: 2.5rem; font-family: inherit; border-radius:10px}
+        .operationsBox {display:block; border:2px solid black;border-top-color:rgb(100 100 100);border-left-color:rgb(100 100 100); height:13%; width:24%; background-color:rgb(210 170 0); margin:3px;  font-size: 2.5rem; font-family: inherit; border-radius:10px}
+        .equalsBox {display:block; border:2px solid black;border-top-color:rgb(100 100 100);border-left-color:rgb(100 100 100); height:16%; width:26%; background-color:rgb(220 130 0); margin:2px; position:relative; top:1%;  font-size: 2.5rem; font-family: inherit; border-radius:10px}
+        .operationsBoxBox {display:inline; position:relative; left:73%; bottom:15%}
+        .numberBox {display:inline; background-color:rgb(220 220 220);border:2px solid black;border-top-color:rgb(100 100 100);border-left-color:rgb(100 100 100); border-radius:10px;  font-size: 1.5rem; font-family: inherit}
+        .gridContainer {
+            display: grid;
+            grid-template-columns: repeat(3, 30.25%);
+            height:55%;
+            width:68%;
+            position:relative;
+            bottom: 70%;
+            left: 3%;
+            grid-gap:10px;
+        }
+        .numberBox:hover {background-color:rgb(190 190 190);}
+        .operationsBox:hover {background-color:rgb(180 140 0);}
+        .equalsBox:hover {background-color:rgb(190 100 0);}
+        .buttonBox:hover {background-color:rgb(150 150 150);}
+
+        .numberBox:active {position: relative; top: 3px; left: 1px; width:100.5%}
+        .operationsBox:active {position: relative; top: 2px; right:1px; width:24.5%}
+        .equalsBox:active {position: relative; top: 8px; right:1px; width:26.5%}
+        .buttonBox:active {position: relative; top: 0.5px; right:1px; width:33.5%; margin:1px}
+
+        button:active {border-top-color:rgb(0 0 0) ;border-left-color:rgb(0 0 0) ;border-bottom-color:rgb(100 100 100);border-right-color:rgb(100 100 100)}
+    </style>
+
+</head>
+<body>
+<script type="text/javascript">
+    let num = "";
+    let num1 = "";
+    let num2 = "";
+    let operation = "";
+
+    let decPoint = false;
+    let isOperation = false;
+    let afterEqual = false;
+    let afterEqual2 = false;
+    let zero = false;
+
+    let divisionByZero = [
+        "Kauna nav",
+        "Kauna nav",
+        "Neka nebija",
+        "Nedala ar 0",
+        "Neuzdriksties",
+        "bezgaliba??",
+        "Neteiksu",
+        "Neteiksu",
+    ]
+
+    function displayOutput() {
+        if (num != "") {
+            if (!zero && ((num.replace(/[-.]/g,"")).length > 11)) {
+                document.getElementById("output").textContent = String(Number(num).toExponential(7));
+            } else {
+                document.getElementById("output").textContent = num;
+            }
+        } else {
+            document.getElementById("output").textContent = (num + 0);
+        }
+    }
+
+    function  subDisplayOutput() {
+        let equalsSign = " =";
+        if (num2 == "") {
+            equalsSign = "";
+        } else {
+            num2 = String(parseFloat(num2));
+        }
+        if (num1 != "") { num1 = String(parseFloat(num1)) }
+
+        if (((num1.replace(/[-.]/g,"")).length > 11)&&((num2.replace(/[-.]/g,"")).length > 11)) {
+            document.getElementById("subOutput").textContent = String(Number(num1).toExponential(7)) + operation + String(Number(num2).toExponential(7)) + equalsSign;
+        } else if ((num1.replace(/[-.]/g,"")).length > 11) {
+            document.getElementById("subOutput").textContent = String(Number(num1).toExponential(7)) + operation + num2 + equalsSign;
+        } else if ((num2.replace(/[-.]/g,"")).length > 11) {
+            document.getElementById("subOutput").textContent = num1 + operation + String(Number(num2).toExponential(7)) + equalsSign;
+        } else {
+            document.getElementById("subOutput").textContent = num1 + operation + num2 + equalsSign;
+        }
+    }
+
+    function operationReset() {
+        if (isOperation) {
+            isOperation = false;
+            num = "";
+            decPoint = false;
+
+            afterEqual = false;
+        }
+    }
+
+    function typeNumber(n) {
+        if (zero) {
+            clearOutput()
+            if (n != 0 ) {
+                num += n;
+                displayOutput();
+            }
+        } else {
+            operationReset();
+            if ((num.replace(/[-.]/g,"")).length < 11) {
+                if (!(n == 0 && (num == "" || num == "0"))) {
+                    num += n;
+                    displayOutput();
+                } else {
+                    displayOutput();
+                }
+            }
+        }
+    }
+
+    function clearOutput() {
+        num = "";
+        num1 = "";
+        num2 = "";
+        operation = "";
+        displayOutput();
+        subDisplayOutput();
+        decPoint = false;
+        isOperation = false;
+        afterEqual = false;
+        afterEqual2 = false;
+        zero = false;
+    }
+
+    function deleteNumber() {
+        if (zero) {
+            clearOutput()
+        } else {
+            if (afterEqual) {
+                document.getElementById("subOutput").textContent = "";
+            } else {
+                if (num.length == 2 && num[0] == "-"){
+                    num = "";
+                    displayOutput();
+                } else if (num.length == 3 && num[0] == "-" && num[1] == "0" && num[2] == "."){
+                    num = "";
+                    displayOutput();
+                    decPoint = false;
+                } else {
+                    if (num[num.length - 1] == ".") {
+                        decPoint = false;
+                    }
+                    num = num.substring(0, num.length - 1);
+                    displayOutput();
+                }
+            }
+        }
+    }
+
+    function negateNumber() {
+        if (zero) {
+            clearOutput()
+        } else {
+            if (afterEqual) {
+                document.getElementById("subOutput").textContent = "";
+            }
+            if (num != "" && num != "." && num != "0") {
+                if (isOperation && !afterEqual) {
+                    isOperation = false;
+                }
+                if (num[0] == "0" && num[1] == "." || num[0] == "-" && num[1] == "0" && num[2] == "." || num[num.length - 1] == ".") {
+                    if (num[0] == "-") {
+                        num = num.replace("-","");
+                    } else {
+                        num = "-" + num;
+                    }
+                    displayOutput();
+                } else {
+                    num = String(parseFloat(num)* -1);
+                    displayOutput();
+                }
+            }
+        }
+    }
+
+    function addDecPoint() {
+        if (zero) {
+            clearOutput()
+            num += ".";
+            if (num == ".") {
+                num = 0 + num;
+            }
+            displayOutput();
+            decPoint = true;
+        } else {
+            if (afterEqual) {
+                operationReset();
+                document.getElementById("subOutput").textContent = "";
+            } else {
+                operationReset();
+            }
+            if (!decPoint) {
+                num += ".";
+                if (num == ".") {
+                    num = 0 + num;
+                }
+                displayOutput();
+                decPoint = true;
+            }
+        }
+    }
+
+    function getResult() {
+        if (operation == " / ") {
+            if (parseFloat(num1) == 0 && parseFloat(num2) == 0) {
+                zero = true;
+                num = "Nedefinets";
+            } else if (parseFloat(num2) == 0) {
+                zero = true;
+                num = divisionByZero[Math.floor(Math.random() * divisionByZero.length)];
+            } else {
+                num = String(parseFloat(num1) / parseFloat(num2));
+            }
+        } else if (operation == " × ") {
+            num = String(parseFloat(num1) * parseFloat(num2));
+        } else if (operation == " - ") {
+            num = String(parseFloat(num1) - parseFloat(num2));
+        } else if (operation == " + ") {
+            num = String(parseFloat(num1) + parseFloat(num2));
+        }
+    }
+
+    function doOperation(op) {
+        if (zero) {
+            clearOutput()
+        } else {
+            if (num1 == "") {num1 = "0"}
+            if (num == "") {num = "0"}
+
+            if (afterEqual2) {
+                num1 = num;
+                num2 = "";
+                afterEqual = false;
+                afterEqual2 = false;
+            } else if (num1 != "" && operation && !isOperation) {
+                num2 = num;
+                getResult();
+                num1 = num;
+                num2 = "";
+            } else {
+                num1 = num;
+            }
+
+            isOperation = true;
+
+            if (op == "division") {
+                operation = " / "
+            } else if (op == "multiplication") {
+                operation = " × "
+            } else if (op == "subtraction") {
+                operation = " - "
+            } else if (op == "addition") {
+                operation = " + "
+            }
+
+            subDisplayOutput();
+        }
+    }
+
+    function isNumeric(str) {
+        if (typeof str != "string") return false;
+        return !isNaN(str) && !isNaN(parseFloat(str))
+    }
+
+    function doEquals() {
+        if (zero) {
+            clearOutput()
+        } else {
+            if (operation) {
+                if (num1 == "") {num1 = "0"}
+                if (num == "") {num = "0"}
+
+                if (afterEqual2) {
+                    num1 = num;
+                }
+
+                if (!afterEqual2) {num2 = num}
+                subDisplayOutput();
+
+                getResult();
+                if (!isNumeric(num) && !zero) {
+                    zero = true;
+                    num = "Invalid"
+                }
+
+                displayOutput();
+
+                afterEqual = true;
+                afterEqual2 = true;
+                isOperation = true;
+            }
+        }
+    }
+</script>
+
+<div class="mainBox">
+    <div id="output" class="displayBox">0</div>
+    <div id="subOutput" class="subDisplayBox"></div>
+    <button class="buttonBox" onClick="clearOutput()">C</button>
+    <button class="buttonBox" onClick="deleteNumber()">del</button>
+    <div class="operationsBoxBox">
+        <button class="operationsBox" onClick="doOperation('division')">÷</button>
+        <button class="operationsBox" onClick="doOperation('multiplication')">×</button>
+        <button class="operationsBox" onClick="doOperation('subtraction')">-</button>
+        <button class="operationsBox" onClick="doOperation('addition')">+</button>
+        <button class="equalsBox" onClick="doEquals()">=</button>
+    </div>
+    <div class="gridContainer">
+        <button class="numberBox" onClick="typeNumber(7)">7</button>
+        <button class="numberBox" onClick="typeNumber(8)">8</button>
+        <button class="numberBox" onClick="typeNumber(9)">9</button>
+        <button class="numberBox" onClick="typeNumber(4)">4</button>
+        <button class="numberBox" onClick="typeNumber(5)">5</button>
+        <button class="numberBox" onClick="typeNumber(6)">6</button>
+        <button class="numberBox" onClick="typeNumber(1)">1</button>
+        <button class="numberBox" onClick="typeNumber(2)">2</button>
+        <button class="numberBox" onClick="typeNumber(3)">3</button>
+        <button class="numberBox" onClick="negateNumber()">+/-</button>
+        <button class="numberBox" onClick="typeNumber(0)">0</button>
+        <button class="numberBox" onClick="addDecPoint()">.</button>
+    </div>
+</div>
 </body>
 </html>
