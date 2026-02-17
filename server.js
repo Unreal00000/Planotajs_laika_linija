@@ -1,11 +1,30 @@
-const express = require('express');
+const express = require("express");
+const path = require("path");
+
 const app = express();
-const port = 3000;
-app.use(express(json));
-app.post("/api/data", (req, res) => {
-    console.log("Sanemtie dati:", req.body);
-    res.json({message: "Dati sanemti veiksmigi!"})
+const PORT = 3000;
+
+// lai var lasīt JSON no fetch()
+app.use(express.json());
+
+// atdod HTML failu
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "code.html"));
 });
-app.listen(port, () =>{
-    console.log(`Serveris darbojas uz http://localhost:${port}`);
+
+// saņem signālu no front-end
+app.post("/signal", (req, res) => {
+    const { message } = req.body;
+
+    console.log("📩 Signal received from client:", message);
+
+    // atbilde uz klientu
+    res.json({
+        status: "ok",
+        modifiedMessage: message * 2, // piemērs: pārveidojam signālu
+    });
+});
+
+app.listen(PORT, () => {
+    console.log(`✅ Server running: http://localhost:${PORT}`);
 });

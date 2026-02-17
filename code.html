@@ -4,6 +4,28 @@
   <meta charset="utf-8">
   <title>Kalkulators</title>
 
+  <script>
+    async function sendSignal(message) {
+      console.log("Signal sent!");
+      console.log("Message:", message);
+
+      const res = await fetch("/signal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }),
+      });
+
+      const data = await res.json();
+      recieveSignal(data.modifiedMessage);
+    }
+
+    function recieveSignal(message) {
+      console.log("Signal recieved!");
+      console.log("Modified message:", message);
+    }
+  </script>
+
+
   <style>
     @import url('https://fonts.cdnfonts.com/css/seven-segment');
 
