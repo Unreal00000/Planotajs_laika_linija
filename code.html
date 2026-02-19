@@ -29,10 +29,16 @@
     @import url('https://fonts.cdnfonts.com/css/seven-segment');
 
     .buttonBox {display:block; border:2px solid black;border-top-color:rgb(100 100 100);border-left-color:rgb(100 100 100); height:16%; width:26%; background-color:rgb(220 130 0); margin:2px; position:relative; top:1%;  font-size: 2.5rem; font-family: inherit; border-radius:10px}
-    .timelineContainer {display:block; container-type:scroll-state; overflow-y:auto; overflow-x:hidden; border:3px solid black; height:70%; width:40%; background-color:rgb(240 240 240); position:absolute; top:20%; left:20%; border-radius:20px}
-    .timelineElement {display:none; border:3px solid black; height:10%; width:98%; background-color:rgb(230 230 230); position:relative; top:1%; left:0.4%; border-radius:20px; margin:0.3%}
+    .timelineContainer {display:block; container-type:scroll-state; overflow-y:auto; overflow-x:hidden; border:3px dotted black; height:70%; width:30%; position:absolute; top:20%; left:20%; border-radius:20px}
+    .timelineElement {display:none; border:3px solid black; height:10%; width:98%; background-color: rgb(0, 235, 255); position:relative; top:1%; left:0.4%; border-radius:20px; margin:0.3%}
+    .relevantContainer {display:block; container-type:scroll-state; overflow-y:auto; overflow-x:hidden; border:3px solid black; height:70%; width:30%; background-color: rgb(22, 158, 0); position:absolute; top:20%; left:60%; border-radius:20px}
+    .relevantElement {display:none; border:3px solid black; height:10%; width:98%; background-color: rgb(55, 255, 0); position:relative; top:1%; left:0.4%; border-radius:20px; margin:0.3%}
+    .filterContainer {display:block; border:3px dotted black; height:7%; width:60%; position:absolute; top:2%; left:30%}
+    .filterElement {display: inline-block; border: 3px solid black; height: 100%; width: 24.73%; background-color: rgb(255, 90, 0); position:relative}
     .buttonBox:hover {background-color:rgb(190 100 0);}
-    .timelineElement:hover {background-color:rgb(200 200 200);}
+    .timelineElement:hover {background-color: rgb(142, 255, 235);}
+    .relevantElement:hover {background-color: rgb(174, 255, 87);}
+    .filterElement:hover {background-color: rgb(255, 135, 51);}
     .buttonBox:active {position: relative; top: 8px; right:1px; width:26.5%}
     ::-webkit-scrollbar {display: none}
   </style>
@@ -43,6 +49,7 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     loadTimeline();
+    loadRelevant();
   });
 
   function loadTimeline() {
@@ -53,6 +60,17 @@
       const clone = timelineElement.cloneNode(true)
       clone.style.display = "inline-block"
       timelineContainer.appendChild(clone)
+    }
+  }
+
+  function loadRelevant() {
+    const relevantElement = document.querySelector(".relevantElement")
+    const relevantContainer = document.querySelector(".relevantContainer")
+
+    for (let i = 0; i < 5; i++) {
+      const clone = relevantElement.cloneNode(true)
+      clone.style.display = "inline-block"
+      relevantContainer.appendChild(clone)
     }
   }
 
@@ -76,6 +94,14 @@
 <button class="buttonBox" onClick="sendSignal(42)">Button</button>
 <div class="timelineContainer"> </div>
 <button class="timelineElement"> </button>
+<div class="relevantContainer"> </div>
+<button class="relevantElement"> </button>
+<div class="filterContainer">
+  <button class="filterElement" onClick="function_1()"> function_1 </button>
+  <button class="filterElement" onClick="function_2()"> function_2 </button>
+  <button class="filterElement" onClick="function_3()"> function_3 </button>
+  <button class="filterElement" onClick="function_4()"> function_4 </button>
+</div>
 
 </body>
 </html>
