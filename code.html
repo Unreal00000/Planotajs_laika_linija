@@ -26,38 +26,50 @@
   </script>
 
   <style>
-    .buttonBox {display:block; border:2px solid black;border-top-color:rgb(100 100 100);border-left-color:rgb(100 100 100); height:16%; width:26%; background-color:rgb(220 130 0); margin:2px; position:relative; top:1%; left:10%;  font-size: 2.5rem; font-family: inherit; border-radius:10px}
     .timelineContainer {display:flex; container-type:scroll-state; white-space: nowrap; overflow-y:hidden; overflow-x:auto; border:3px dotted black; height:40%; width:50%; position:absolute; top:8%; left:10%; border-radius:20px}
-    .timelineElement {display:none; flex: 0 0 auto; width: 200px; height: 100px; border:3px solid black; height:98%; width:10%; background-color: rgb(0, 235, 255); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%}
-    .relevantContainer {display:block; container-type:scroll-state; overflow-y:auto; overflow-x:hidden; border:3px solid black; height:40%; width:80%; background-color: rgb(22, 158, 0); position:absolute; top:52%; left:10%; border-radius:20px}
-    .relevantElement {display:none; border:3px solid black; height:10%; width:98%; background-color: rgb(55, 255, 0); position:relative; top:1%; left:0.4%; border-radius:20px; margin:0.3%}
+    .timelineElement {display:none; flex: 0 0 auto; border:3px solid black; height:98%; width:10%; background-color: rgb(0, 235, 255); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%}
+    .relevantContainer {display:flex; container-type:scroll-state; white-space: nowrap; overflow-y:hidden; overflow-x:auto; border:3px solid black; height:40%; width:80%; background-color: rgb(22, 158, 0); position:absolute; top:52%; left:10%; border-radius:20px}
+    .relevantElement {display:none; flex: 0 0 auto; border:3px solid black; height:98%; width:20%; background-color: rgb(55, 255, 0); position:relative; top:0%; left:0.2%; border-radius:20px; margin:0.2%}
     .filterContainer {display:block; border:3px dotted black; height:99.5%; width:5%; position:absolute; top:0%; left:0%}
     .filterElement {display: inline-block; border: 3px solid black; height:25%; width:100%; background-color: rgb(255, 90, 0); position:relative}
-    .todayContainer {display:block; container-type:scroll-state; overflow-y:auto; overflow-x:hidden; border:3px solid black; height:40%; width:28%; position:absolute; top:8%; left:62%; border-radius:20px}
-    .buttonBox:hover {background-color:rgb(190 100 0);}
+    .todayContainer {display:block; container-type:scroll-state; overflow-y:auto; overflow-x:hidden; border:3px solid black; height:40%; width:28%; position:absolute; top:8%; left:62%; border-radius:20px; font-weight: bold; font-size:xx-large}
     .timelineElement:hover {background-color: rgb(142, 255, 235);}
     .relevantElement:hover {background-color: rgb(174, 255, 87);}
     .filterElement:hover {background-color: rgb(255, 135, 51);}
-    .buttonBox:active {position: relative; top: 8px; right:1px; width:26.5%}
-    /*::-webkit-scrollbar {display: none}
+    .timelineElement:active {background-color: rgb(255, 255, 255)}
+    .relevantElement:active {background-color: rgb(255, 255, 255)}
+    .filterElement:active {background-color: rgb(255, 255, 255)}
+    ::-webkit-scrollbar {display: none}
   </style>
 
 </head>
 <body>
 <script type="text/javascript">
 
+  function transformScroll(event) {
+    if (!event.deltaY) {
+      return
+    }
+
+    event.currentTarget.scrollLeft += event.deltaY + event.deltaX
+    event.preventDefault()
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
-    loadTimeline();
-    loadRelevant();
-  });
+    loadTimeline()
+    loadRelevant()
+  })
 
   function loadTimeline() {
     const timelineElement = document.querySelector(".timelineElement")
     const timelineContainer = document.querySelector(".timelineContainer")
 
-    for (let i = 0; i < 20; i++) {
+    timelineContainer.addEventListener('wheel', transformScroll)
+
+    for (let i = 0; i < 200; i++) {
       const clone = timelineElement.cloneNode(true)
       clone.style.display = "inline-block"
+      clone.textContent = i
       timelineContainer.appendChild(clone)
     }
   }
@@ -66,15 +78,17 @@
     const relevantElement = document.querySelector(".relevantElement")
     const relevantContainer = document.querySelector(".relevantContainer")
 
-    for (let i = 0; i < 5; i++) {
+    relevantContainer.addEventListener('wheel', transformScroll)
+
+    for (let i = 0; i < 6; i++) {
       const clone = relevantElement.cloneNode(true)
       clone.style.display = "inline-block"
+      clone.textContent = i
       relevantContainer.appendChild(clone)
     }
   }
 </script>
 
-<button class="buttonBox" onClick="sendSignal(42)">Button</button>
 <div class="timelineContainer"> </div>
 <button class="timelineElement"> </button>
 <div class="relevantContainer"> </div>
@@ -85,7 +99,7 @@
   <button class="filterElement" onClick="function_3()"> function_3 </button>
   <button class="filterElement" onClick="function_4()"> function_4 </button>
 </div>
-<div class="todayContainer"> </div>
+<div class="todayContainer"> Šodienas aktuālais notikums! Tev vēl jāstrādā, nekādas atpūtas nebūs, līdz šis teksts netiks aizstāts ar īsto elementu! </div>
 
 </body>
 </html>
