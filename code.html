@@ -23,6 +23,79 @@
       console.log("Signal recieved!");
       console.log("Modified message:", message);
     }
+    // Sarkanais bloks → pievieno jaunu notikumu
+    async function function_1() {
+      const text = prompt("Ieraksti jauno notikumu:");
+      if (!text) return;
+
+      const res = await fetch("/add-event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text })
+      });
+
+      const data = await res.json();
+      updateTimeline(data.events);
+    }
+
+    // Atjauno zilos blokus
+    function updateTimeline(events) {
+      const elements = document.querySelectorAll(".timelineElement");
+      elements.forEach((el, index) => {
+        el.innerText = events[index] || "";
+      });
+    }
+
+    // Kad lapu ielādē → ielādē arī iepriekšējos notikumus
+    async function loadEvents() {
+      const res = await fetch("/events");
+      const data = await res.json();
+      updateTimeline(data.events);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      loadTimeline();
+      loadRelevant();
+      loadEvents(); // iepriekšējie notikumi
+    });
+
+    // Sarkanais bloks → dzēšana
+    async function function_2() {
+      // Ielādē visus notikumus
+      const res = await fetch("/events");
+      const data = await res.json();
+      const events = data.events;
+
+      if (events.length === 0) {
+        alert("Nav neviena notikuma, ko dzēst!");
+        return;
+      }
+
+      // Sagatavo izvēli promptam
+      let msg = "Izvēlies notikuma numuru, ko dzēst:\n";
+      events.forEach((text, i) => {
+        msg += `${i + 1}: ${text}\n`;
+      });
+
+      const choice = prompt(msg);
+      if (!choice) return;
+
+      const index = parseInt(choice) - 1;
+      if (isNaN(index) || index < 0 || index >= events.length) {
+        alert("Nepareizs izvēles numurs!");
+        return;
+      }
+
+      // Nosūta dzēšanas pieprasījumu serverim
+      const delRes = await fetch("/delete-event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ index })
+      });
+
+      const delData = await delRes.json();
+      updateTimeline(delData.events);
+    }
   </script>
 
   <style>
