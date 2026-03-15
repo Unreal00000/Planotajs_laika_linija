@@ -9,7 +9,7 @@ const demoData = [
     {"name":"KD matemātikā","date":1773844782,"tag":["Kontroldarbs"],"description":"Atvasināšana, funkcijas ekstrēmu noteikšana."},
     {"name":"Literatūra, pērļu zvejnieks","date":null,"tag":["Mājas darbs"],"description":"Pabeigt lasīt 'Pērļu zvejnieku'"},
     {"name":"Pica!","date":1774017582,"tag":[null],"description":"Picas ballīte piektdienā!"},
-    {"name":"ZPD aizstāvēšana","date":1772807982,"tag":["Skola"],"description":null},
+    {"name":"ZPD aizstāvēšana","date":1772604200,"tag":["Skola"],"description":null},
     {"name":"Kamermūzikas vakars","date":null,"tag":["Mājas darbs","Skola"],"description":"Gatavoties kamermūzikas vakaram."},
 ]
 
@@ -21,9 +21,13 @@ var data_R = data_TR[1]
 
 const daysPast = 365
 const daysFuture = 365
-const today  = new Date()
+const today = new Date()
+today.setHours(0, 0, 0, 0)
 const todayUnix = Math.floor(today.getTime() / 1000)
 const calendarDays =  generateDays(daysPast, daysFuture)
+
+var todayTask = []
+var todayTaskBox = []
 
 function seperateAndSortData(data) {
     var data_t = data.filter(item => item.date)
@@ -58,6 +62,7 @@ function transformScroll(event) {
 document.addEventListener("DOMContentLoaded", function () {
     loadTimeline(data_T, calendarDays)
     loadRelevant(data_R)
+    loadToday()
 })
 
 function loadTimeline(tasks, days) {
@@ -92,6 +97,7 @@ function loadTimeline(tasks, days) {
                 position = "past"
             } else if (todayUnix < item.date && (todayUnix + 86400) > item.date) {
                 position = "today"
+                todayTask.push(item)
             }
         } else if (itemType == "day") {
             if (item < todayUnix) {
@@ -105,12 +111,15 @@ function loadTimeline(tasks, days) {
             TLE.setAttribute("class", "timelineElement_past")
         } else if (position == "today") {
             TLE.setAttribute("class", "timelineElement_today")
+            let tempVar = TLE
+            todayTaskBox.push(tempVar)
+            requestAnimationFrame(() => {
+                timelineContainer.scrollLeft = todayTaskBox[0].offsetLeft - timelineContainer.clientWidth / 4 + todayTaskBox[0].clientWidth / 2
+            })
         }
 
         document.getElementById("timelineContainer").appendChild(TLE)
     })
-    // jāsakārto
-    timelineContainer.scrollLeft = daysPast * 0.0428 * window.innerWidth
 }
 
 function loadRelevant(tasks) {
@@ -123,4 +132,11 @@ function loadRelevant(tasks) {
         RE.setAttribute("class", "relevantElement")
         document.getElementById("relevantContainer").appendChild(RE)
     })
+}
+
+function loadToday() {
+    if (todayTask !== []) {
+        //pievienot stilā virsrakstu (nosaukumu) un parastā teksta (aprakstu) apakšobjektus, kurus ievietot todayContainer
+        todayContainer.textContent = todayTask[0].name
+    }
 }

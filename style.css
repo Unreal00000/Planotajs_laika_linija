@@ -18,7 +18,7 @@
 .relevantElement:active {background-color: rgb(255, 255, 255)}
 
 /* Today */
-.todayContainer {display:block; container-type:scroll-state; overflow-y:auto; overflow-x:hidden; border:3px solid black; height:40%; width:28%; position:absolute; top:8%; left:62%; border-radius:20px; font-weight: bold; font-size:xx-large}
+.todayContainer {display:block; container-type:scroll-state; overflow-y:auto; overflow-x:hidden; border:3px solid black; height:40%; width:28%; position:absolute; top:8%; left:62%; border-radius:20px; margin:auto; font-weight:bold; font-size:xx-large; text-align:center}
 
 /* Filter */
 .filterContainer {display:block; border:3px dotted black; height:99.5%; width:5%; position:absolute; top:0%; left:0%}
