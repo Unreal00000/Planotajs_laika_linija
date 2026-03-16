@@ -6,10 +6,10 @@
 // datumam izmanto Unix Time Stamp
 const demoData = [
     {"name":"KD programmēšanā","date":1773758382,"tag":["Kontroldarbs"],"description":"Jāpabeidz projekts ar gatavām testējamām funkcijām!"},
-    {"name":"KD matemātikā","date":1773844782,"tag":["Kontroldarbs"],"description":"Atvasināšana, funkcijas ekstrēmu noteikšana."},
+    {"name":"KD matemātikā","date":1773612000,"tag":["Kontroldarbs"],"description":"Atvasināšana, funkcijas ekstrēmu noteikšana."},
     {"name":"Literatūra, pērļu zvejnieks","date":null,"tag":["Mājas darbs"],"description":"Pabeigt lasīt 'Pērļu zvejnieku'"},
     {"name":"Pica!","date":1774017582,"tag":[null],"description":"Picas ballīte piektdienā!"},
-    {"name":"ZPD aizstāvēšana","date":1772604200,"tag":["Skola"],"description":null},
+    {"name":"ZPD aizstāvēšana","date":1773612000,"tag":["Skola"],"description":null},
     {"name":"Kamermūzikas vakars","date":null,"tag":["Mājas darbs","Skola"],"description":"Gatavoties kamermūzikas vakaram."},
 ]
 
@@ -70,10 +70,15 @@ function loadTimeline(tasks, days) {
     timelineContainer.addEventListener('wheel', transformScroll)
 
     tasks.forEach(item => {
-        const index = days.findIndex(day => (day < item.date && (day + 86400) > item.date))
+        var index = days.findIndex(day => (day <= item.date && (day + 86400) > item.date))
 
         if (index !== -1) {
             days[index] = item
+        } else {
+            index = days.findIndex(day => (day.date <= item.date && (day.date + 86400) > item.date))
+            if (index !== -1) {
+                days.splice(index + 1, 0, item)
+            }
         }
     })
 
@@ -95,7 +100,7 @@ function loadTimeline(tasks, days) {
         if (itemType == "task") {
             if (item.date < todayUnix) {
                 position = "past"
-            } else if (todayUnix < item.date && (todayUnix + 86400) > item.date) {
+            } else if (todayUnix <= item.date && (todayUnix + 86400) > item.date) {
                 position = "today"
                 todayTask.push(item)
             }
