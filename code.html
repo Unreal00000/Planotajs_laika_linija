@@ -43,9 +43,14 @@
 
     // Atjauno zilos blokus
     function updateTimeline(events) {
-      const elements = document.querySelectorAll(".timelineElement");
-      elements.forEach((el, index) => {
-        el.innerText = events[index] || "";
+      const container = document.getElementById("timelineContainer");
+      container.innerHTML = "";
+
+      events.forEach(text => {
+        const el = document.createElement("div");
+        el.className = "timelineElement";
+        el.innerText = text;
+        container.appendChild(el);
       });
     }
 
@@ -96,6 +101,46 @@
 
       const delData = await delRes.json();
       updateTimeline(delData.events);
+    }
+    async function function_3() {
+      // Iegūst visus notikumus
+      const res = await fetch("/events");
+      const data = await res.json();
+      const events = data.events;
+
+      if (events.length === 0) {
+        alert("Nav neviena notikuma, ko rediģēt!");
+        return;
+      }
+
+      // Parāda izvēli
+      let msg = "Izvēlies notikuma numuru, ko rediģēt:\n";
+      events.forEach((text, i) => {
+        msg += `${i + 1}: ${text}\n`;
+      });
+
+      const choice = prompt(msg);
+      if (!choice) return;
+
+      const index = parseInt(choice) - 1;
+      if (isNaN(index) || index < 0 || index >= events.length) {
+        alert("Nepareizs numurs!");
+        return;
+      }
+
+      // Jaunais teksts
+      const newText = prompt("Ieraksti jauno tekstu:", events[index]);
+      if (!newText) return;
+
+      // Nosūta serverim
+      const editRes = await fetch("/edit-event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ index, newText })
+      });
+
+      const editData = await editRes.json();
+      updateTimeline(editData.events);
     }
   </script>
 
