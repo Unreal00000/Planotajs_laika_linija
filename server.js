@@ -5,11 +5,15 @@ const sqlite3 = require("sqlite3").verbose();
 const app = express();
 const PORT = 3000;
 
-app.use(express.json());
-app.use(express.static(__dirname));
-
 // Izveido vai atver datubāzi
-const db = new sqlite3.Database("events.db");
+const basePath = process.pkg ? path.dirname(process.execPath) : __dirname;
+const db = new sqlite3.Database(path.join(basePath, "events.db"));
+
+app.use(express.json());
+
+
+app.use(express.static(basePath));
+
 
 // Izveido tabulu, ja vēl nav
 db.run(`
@@ -21,7 +25,7 @@ db.run(`
 
 // Servē HTML
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "code.html"));
+    res.sendFile(path.join(basePath, "code.html"));
 });
 app.post("/signal", (req, res) => {
     const message = req.body.message;
@@ -111,4 +115,5 @@ app.post("/edit-event", (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server running at http://localhost:${PORT}`);
+    console.log(`Atver pārlūkprogrammu un ej uz http://localhost:${PORT}`);
 });
