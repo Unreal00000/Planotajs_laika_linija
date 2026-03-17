@@ -6,10 +6,10 @@
 // datumam izmanto Unix Time Stamp
 const demoData = [
     {"name":"KD programmēšanā","date":1773758382,"tag":["Kontroldarbs"],"description":"Jāpabeidz projekts ar gatavām testējamām funkcijām!"},
-    {"name":"KD matemātikā","date":1773612000,"tag":["Kontroldarbs"],"description":"Atvasināšana, funkcijas ekstrēmu noteikšana."},
+    {"name":"KD matemātikā","date":1773758382,"tag":["Kontroldarbs"],"description":"Atvasināšana, funkcijas ekstrēmu noteikšana. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. "},
     {"name":"Literatūra, pērļu zvejnieks","date":null,"tag":["Mājas darbs"],"description":"Pabeigt lasīt 'Pērļu zvejnieku'"},
     {"name":"Pica!","date":1774017582,"tag":[null],"description":"Picas ballīte piektdienā!"},
-    {"name":"ZPD aizstāvēšana","date":1773612000,"tag":["Skola"],"description":null},
+    {"name":"ZPD aizstāvēšana","date":1773758382,"tag":["Skola"],"description":null},
     {"name":"Kamermūzikas vakars","date":null,"tag":["Mājas darbs","Skola"],"description":"Gatavoties kamermūzikas vakaram."},
 ]
 
@@ -141,7 +141,30 @@ function loadRelevant(tasks) {
 
 function loadToday() {
     if (todayTask !== []) {
-        //pievienot stilā virsrakstu (nosaukumu) un parastā teksta (aprakstu) apakšobjektus, kurus ievietot todayContainer
-        todayContainer.textContent = todayTask[0].name
+        function addBlank () {
+            TDE_blank = document.createElement("block")
+            TDE_blank.setAttribute("class", "todayElement_blank")
+            document.getElementById("todayContainer").appendChild(TDE_blank)
+        }
+
+        todayContainer.textContent = ""
+
+        todayTask.forEach(function (item) {
+            addBlank()
+
+            TDE_H = document.createElement("block")
+            TDE_H.textContent = item.name
+            TDE_H.setAttribute("class", "todayElement_header")
+            document.getElementById("todayContainer").appendChild(TDE_H)
+
+            if (item.description && item.description.length > 0) {
+                TDE_T = document.createElement("block")
+                TDE_T.textContent = item.description
+                TDE_T.setAttribute("class", "todayElement_text")
+                document.getElementById("todayContainer").appendChild(TDE_T)
+            }
+        })
+
+        addBlank()
     }
 }
