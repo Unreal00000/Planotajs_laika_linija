@@ -24,8 +24,8 @@
 .todayElement_blank {display:inline-block; flex: 0 0 auto; height:4%; width:100%; position:relative; top:0%; left:0%}
 
 /* Tag */
-.tagContainer {display:block; height:10%; width:100%; position:relative; top:0%; left:0%}
-.tagElement {display:block; height:100%; width:auto; background-color: rgb(255, 255, 255); position:relative; top:0%; left:0%}
+.tagContainer {display:flex; flex-direction: row; align-items: stretch; gap: 0px; height:10%; width:100%; position:relative; top:0%; left:0%}
+.tagElement {display:block; flex: 1; min-width: 0; height:100%; width:auto; background-color: rgb(255, 255, 255); position:relative; top:0%; left:0%}
 
 /* Filter */
 .filterContainer {display:block; border:3px dotted black; height:99.5%; width:5%; position:absolute; top:0%; left:0%}
