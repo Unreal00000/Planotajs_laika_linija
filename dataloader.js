@@ -8,8 +8,8 @@ const demoData = [
     {"name":"KD programmēšanā","date":1773698400,"tag":["Kontroldarbs"],"description":"Jāpabeidz projekts ar gatavām testējamām funkcijām!"},
     {"name":"KD matemātikā","date":1773698400,"tag":["Kontroldarbs"],"description":"Atvasināšana, funkcijas ekstrēmu noteikšana. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. "},
     {"name":"Literatūra, pērļu zvejnieks","date":null,"tag":["Mājas darbs"],"description":"Pabeigt lasīt 'Pērļu zvejnieku'"},
-    {"name":"Pica!","date":1774017582,"tag":[null],"description":"Picas ballīte piektdienā!"},
-    {"name":"ZPD aizstāvēšana","date":1773352800,"tag":["Skola"],"description":null},
+    {"name":"Pica!","date":1774017582,"tag":[],"description":"Picas ballīte piektdienā!"},
+    {"name":"ZPD aizstāvēšana","date":1773352800,"tag":["Skola"],"description":""},
     {"name":"Kamermūzikas vakars","date":null,"tag":["Mājas darbs","Skola"],"description":"Gatavoties kamermūzikas vakaram."},
 ]
 // saglabāti apzīmētāji un tiem atbilstošās krāsas
@@ -100,7 +100,7 @@ function loadTimeline(tasks, days) {
             TLE.style.width = "20%"
             itemType = "task"
         } else if (typeof item == "number") {
-            TLE.textContent = item
+            //TLE.textContent = item
             itemType = "day"
         }
 
@@ -152,6 +152,7 @@ function loadToday() {
         TDE_blank.setAttribute("class", "todayElement_blank")
         document.getElementById("todayContainer").appendChild(TDE_blank)
     }
+    addBlank()
 
     function addHeader (text) {
         TDE_H = document.createElement("block")
@@ -162,7 +163,6 @@ function loadToday() {
 
     if (todayTask.length > 0) {
         todayTask.forEach(function (item) {
-            addBlank()
             addHeader(item.name)
 
             if (item.description && item.description.length > 0) {
@@ -174,7 +174,6 @@ function loadToday() {
         })
         addBlank()
     } else {
-        addBlank()
         addHeader("Šodien notikumu nav!")
     }
 }
