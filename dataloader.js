@@ -24,9 +24,10 @@ var data = demoData
 var tagColors = demoColors
 
 var data_TR = seperateAndSortData(data)
-var data_T = data_TR[0]
-var data_R = data_TR[1]
+const data_T = data_TR[0]
+const data_R = data_TR[1]
 
+// laiks tiek ielādēts tikai 1 reizi, kad programma sāk darboties
 const daysPast = 365
 const daysFuture = 365
 const today = new Date()
@@ -36,6 +37,9 @@ const calendarDays =  generateDays(daysPast, daysFuture)
 
 var todayTask = []
 var todayTaskBox = []
+
+var firstTime_T = true
+var firstTime_R = true
 
 function seperateAndSortData(data) {
     var data_t = data.filter(item => item.date)
@@ -67,32 +71,48 @@ function transformScroll(event) {
     event.preventDefault()
 }
 
-function loadAll () {
+document.addEventListener("DOMContentLoaded", function () {
     loadTimeline(data_T, calendarDays)
     loadRelevant(data_R)
     loadToday()
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-    loadAll()
 })
 
-function loadTimeline(tasks, days) {
+function loadTimeline(tasks, calendarDays, filterType, filterDirection, filterTags) {
+    let days = [...calendarDays]
 
-    timelineContainer.addEventListener('wheel', transformScroll)
-
-    tasks.forEach(item => {
-        var index = days.findIndex(day => (day <= item.date && (day + 86400) > item.date))
-
-        if (index !== -1) {
-            days[index] = item
-        } else {
-            index = days.findIndex(day => (day.date <= item.date && (day.date + 86400) > item.date))
-            if (index !== -1) {
-                days.splice(index + 1, 0, item)
-            }
+    if (firstTime_T) {
+        timelineContainer.addEventListener('wheel', transformScroll)
+        firstTime_T = false
+    } else {
+        todayTaskBox = []
+        while (timelineContainer.hasChildNodes()) {
+            timelineContainer.removeChild(timelineContainer.firstChild)
+            console.log(1)
         }
-    })
+    }
+
+    var greenLight = true
+
+    if (filterType === "tasks") {
+        days = tasks
+    } else {
+        tasks.forEach(item => {
+            var index = days.findIndex(day => (day <= item.date && (day + 86400) > item.date))
+
+            if (index !== -1) {
+                days[index] = item
+            } else {
+                index = days.findIndex(day => (day.date <= item.date && (day.date + 86400) > item.date))
+                if (index !== -1) {
+                    days.splice(index + 1, 0, item)
+                }
+            }
+        })
+    }
+
+    if (filterDirection === "reverse") {
+        days = days.reverse()
+    }
 
     days.forEach(function (item) {
         TLE = document.createElement("button")
@@ -101,6 +121,20 @@ function loadTimeline(tasks, days) {
         var position
 
         if (typeof item === "object") {
+            if (filterTags) {
+                greenLight = false
+                item.tag.forEach(function (tag) {
+                    if (filterTags.includes(tag)) {
+                        greenLight = true
+                    }
+                })
+            }
+
+            if (greenLight === false) {
+                greenLight = true
+                return
+            }
+
             let d = new Date(item.date * 1000)
             let text = d.toString().slice(0, 15)
 
@@ -150,23 +184,47 @@ function loadTimeline(tasks, days) {
         }
 
         document.getElementById("timelineContainer").appendChild(TLE)
+        greenLight = true
     })
 }
 
-function loadRelevant(tasks) {
+function loadRelevant(tasks, filterTags) {
+    if (firstTime_R) {
+        relevantContainer.addEventListener('wheel', transformScroll)
+        firstTime_R = false
+    } else {
+        while (relevantContainer.hasChildNodes()) {
+            relevantContainer.removeChild(relevantContainer.firstChild)
+        }
+    }
 
-    relevantContainer.addEventListener('wheel', transformScroll)
+    var greenLight = true
 
     tasks.forEach(function (item) {
-        RE = document.createElement("button")
-        RE.textContent = item.name
-        RE.setAttribute("class", "relevantElement")
-        addTagColor(item, RE)
-        document.getElementById("relevantContainer").appendChild(RE)
+        if (filterTags) {
+            greenLight = false
+            item.tag.forEach(function (tag) {
+                if (filterTags.includes(tag)) {
+                    greenLight = true
+                }
+            })
+        }
+        if (greenLight) {
+            RE = document.createElement("button")
+            RE.textContent = item.name
+            RE.setAttribute("class", "relevantElement")
+            addTagColor(item, RE)
+            document.getElementById("relevantContainer").appendChild(RE)
+        }
+        greenLight = true
     })
 }
 
 function loadToday() {
+    while (todayContainer.hasChildNodes()) {
+        todayContainer.removeChild(todayContainer.firstChild)
+    }
+
     function addBlank () {
         TDE_blank = document.createElement("div")
         TDE_blank.setAttribute("class", "todayElement_blank")
@@ -246,6 +304,8 @@ function loadToday() {
     } else {
         addHeader("Šodien notikumu nav!")
     }
+
+    todayTask = []
 }
 
 function addTagColor (item, element) {
@@ -284,50 +344,47 @@ function addTagColor (item, element) {
     }
 }
 
-function sortTimeline (method, direction, tags) {
+// methods: "" vai "tasks", directions: "" vai "reverse"
+function filterTimeline (method, direction, tags) {
     if (direction !== "reverse") {
         direction = "normal"
     }
 
-    if (!method || method === "") {
-        if (tags.length > 0) {
-            var validTags = []
-            tags.forEach(function (tag) {
-                if (tagColors[tag]) {
-                    validTags.push(tag)
-                }
-            })
-            if (validTags.length > 0) {
-                //loadTimeline(data_T, calendarDays)
-                loadRelevant(data_R)
-                loadToday()
-            } else {
-                loadAll()
-            }
-        } else {
-           loadAll()
-        }
-    } else if (method === "tasks") {
-        if (tags.length > 0) {
-            var validTags = []
-            tags.forEach(function (tag) {
-                if (tagColors[tag]) {
-                    validTags.push(tag)
-                }
-            })
-            if (validTags.length > 0) {
-                //loadTimeline(data_T, calendarDays)
-                loadRelevant(data_R)
-                loadToday()
-            } else {
-                //loadTimeline(data_T, calendarDays) the same
-                loadRelevant(data_R)
-                loadToday()
-            }
-        } else {
-            //loadTimeline(data_T, calendarDays) the same
+    if (!method || method === "" || method === "default") {
+        method = "default"
+    }
+
+    function filterTimeline_2 () {
+
+        function filterTimeline_3 () {
+            loadTimeline(data_T, calendarDays, method, direction)
             loadRelevant(data_R)
             loadToday()
         }
+
+        if (tags && tags.length > 0) {
+            var validTags = []
+            tags.forEach(function (tag) {
+                if (tagColors[tag]) {
+                    validTags.push(tag)
+                }
+            })
+            if (validTags.length > 0) {
+                loadTimeline(data_T, calendarDays, method, direction, validTags)
+                loadRelevant(data_R, validTags)
+                loadToday()
+            } else {
+                filterTimeline_3()
+            }
+        } else {
+            filterTimeline_3()
+        }
     }
+    filterTimeline_2()
 }
+
+//Jāsalabo caurums, kas paliek, kad izņem notikumu
+setTimeout(() => {
+    filterTimeline("default", "normal", ["Skola"])
+    console.log("Executed after 3 seconds");
+}, 3000);
