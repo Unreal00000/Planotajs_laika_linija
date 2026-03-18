@@ -1,31 +1,33 @@
 @charset "UTF-8";
 /* TimeLine */
 .timelineContainer {display:flex; container-type:scroll-state; white-space:nowrap; overflow-y:hidden; overflow-x:auto; border:3px dotted black; height:40%; width:50%; position:absolute; top:8%; left:10%; border-radius:20px}
-.timelineElement {display:inline-block; flex: 0 0 auto; border:3px solid black; height:98%; width:8%; background-color: rgb(0, 235, 255); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%}
+.timelineElement {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:98%; width:8%; background-color: rgb(0, 235, 255); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%}
 .timelineElement:hover {background-color: rgb(142, 255, 235)}
 .timelineElement:active {background-color: rgb(255, 255, 255)}
-.timelineElement_past {display:inline-block; flex: 0 0 auto; border:3px solid black; height:98%; width:8%; background-color: rgb(128, 128, 128); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%}
+.timelineElement_past {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:98%; width:8%; background-color: rgb(128, 128, 128); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%}
 .timelineElement_past:hover {background-color: rgb(175, 175, 175)}
 .timelineElement_past:active {background-color: rgb(255, 255, 255)}
-.timelineElement_today {display:inline-block; flex: 0 0 auto; border:3px solid black; height:98%; width:8%; background-color: rgb(255, 208, 0); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%}
+.timelineElement_today {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:98%; width:8%; background-color: rgb(255, 208, 0); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%}
 .timelineElement_today:hover {background-color: rgb(255, 232, 135)}
 .timelineElement_today:active {background-color: rgb(255, 255, 255)}
 
 /* Relevant */
 .relevantContainer {display:flex; container-type:scroll-state; white-space:nowrap; overflow-y:hidden; overflow-x:auto; border:3px solid black; height:40%; width:80%; background-color: rgb(22, 158, 0); position:absolute; top:52%; left:10%; border-radius:20px}
-.relevantElement {display:inline-block; flex: 0 0 auto; border:3px solid black; height:98%; width:20%; background-color: rgb(55, 255, 0); position:relative; top:0%; left:0.2%; border-radius:20px; margin:0.2%}
+.relevantElement {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:98%; width:20%; background-color: rgb(55, 255, 0); position:relative; top:0%; left:0.2%; border-radius:20px; margin:0.2%}
 .relevantElement:hover {background-color: rgb(174, 255, 87)}
 .relevantElement:active {background-color: rgb(255, 255, 255)}
 
 /* Today */
 .todayContainer {display:block; container-type:scroll-state; overflow-y:auto; overflow-x:hidden; border:3px solid black; height:40%; width:28%; position:absolute; top:8%; left:62%; border-radius:20px}
-.todayElement_header {display:inline-block; flex: 0 0 auto; height:auto; width:94%; position:relative; top:0%; left:3%; border-radius:10px; margin:auto; font-weight:bold; font-size:xx-large; text-align:center}
-.todayElement_text {display:inline-block; flex: 0 0 auto; height:auto; width:94%; position:relative; top:0%; left:3%; border-radius:10px; margin:auto; font-size:x-large; text-align:center}
+.todayElement_headerContainer {display:flex; flex-direction: row; align-items: stretch; gap: 1%; justify-content: space-between; align-items: center; overflow: hidden; height:auto; width:94%; position:relative; top:0%; left:0%; margin:auto;}
+.todayElement_header {display:inline-block; flex-grow: 1; height:auto; width: auto; max-width: 90%; position:relative; top:0%; left:0%; margin:auto; font-weight:bold; font-size:xx-large; text-align:center}
+.todayElement_text {display:inline-block; flex: 0 0 auto; height:auto; width:94%; position:relative; top:0%; left:3%; margin:auto; font-size:x-large; text-align:center}
 .todayElement_blank {display:inline-block; flex: 0 0 auto; height:4%; width:100%; position:relative; top:0%; left:0%}
+.todayDecoration_1 {display:flex; flex-direction: row; align-items: stretch; gap: 0px; flex-grow: 1; height: 8px; position: relative}
 
 /* Tag */
-.tagContainer {display:flex; flex-direction: row; align-items: stretch; gap: 0px; height:10%; width:100%; position:relative; top:0%; left:0%}
-.tagElement {display:block; flex: 1; min-width: 0; height:100%; width:auto; background-color: rgb(255, 255, 255); position:relative; top:0%; left:0%}
+.tagContainer {display:flex; flex-direction: row; align-items: stretch; gap: 0px; height:15%; width:100%; position:absolute; top:0%; left:0%}
+.tagElement {display:block; flex: 1; min-width: 0; height:100%; width:auto; position:relative; top:0%; left:0%}
 
 /* Filter */
 .filterContainer {display:block; border:3px dotted black; height:99.5%; width:5%; position:absolute; top:0%; left:0%}

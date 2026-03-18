@@ -5,8 +5,8 @@
 // demonstrācijas dati jeb kā dati tiks sakārtoti
 // datumam izmanto Unix Time Stamp
 const demoData = [
-    {"name":"KD programmēšanā","date":1773698400,"tag":["Kontroldarbs"],"description":"Jāpabeidz projekts ar gatavām testējamām funkcijām!"},
-    {"name":"KD matemātikā","date":1773698400,"tag":["Kontroldarbs"],"description":"Atvasināšana, funkcijas ekstrēmu noteikšana. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. "},
+    {"name":"KD programmēšanā","date":1773798400,"tag":["Kontroldarbs"],"description":"Jāpabeidz projekts ar gatavām testējamām funkcijām!"},
+    {"name":"KD matemātikā","date":1773798400,"tag":["Kontroldarbs", "Mājas darbs", "Skola"],"description":"Atvasināšana, funkcijas ekstrēmu noteikšana. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. "},
     {"name":"Literatūra, pērļu zvejnieks","date":null,"tag":["Mājas darbs"],"description":"Pabeigt lasīt 'Pērļu zvejnieku'"},
     {"name":"Pica!","date":1774017582,"tag":[],"description":"Picas ballīte piektdienā!"},
     {"name":"ZPD aizstāvēšana","date":1773352800,"tag":["Skola"],"description":""},
@@ -14,6 +14,7 @@ const demoData = [
 ]
 // saglabāti apzīmētāji un tiem atbilstošās krāsas
 const demoColors = {
+    "No tag":"rgb(0, 0, 0)", // "No tag" nav pievienojams vai nodzēšams, bet tā krāsa ir rediģējama
     "Kontroldarbs":"rgb(255,0,0)",
     "Mājas darbs":"rgb(0,166,255)",
     "Skola":"rgb(102,0,255)",
@@ -105,6 +106,7 @@ function loadTimeline(tasks, days) {
         }
 
         if (itemType == "task") {
+            addTagColor(item, TLE)
             if (item.date < todayUnix) {
                 position = "past"
             } else if (todayUnix <= item.date && (todayUnix + 86400) > item.date) {
@@ -142,6 +144,7 @@ function loadRelevant(tasks) {
         RE = document.createElement("button")
         RE.textContent = item.name
         RE.setAttribute("class", "relevantElement")
+        addTagColor(item, RE)
         document.getElementById("relevantContainer").appendChild(RE)
     })
 }
@@ -154,16 +157,66 @@ function loadToday() {
     }
     addBlank()
 
-    function addHeader (text) {
+    function addHeader (text, tags) {
         TDE_H = document.createElement("block")
-        TDE_H.textContent = text
-        TDE_H.setAttribute("class", "todayElement_header")
+        TDE_H.setAttribute("class", "todayElement_headerContainer")
+
+        function addDecor (bool) {
+            D1 = document.createElement("block")
+            D1.setAttribute("class", "todayDecoration_1")
+
+            var usedTags = []
+            var tagsArray
+            if (bool) {
+                tagsArray = tags
+            } else {
+                tagsArray = tags.reverse()
+            }
+
+            if (tagsArray.length > 0) {
+                tagsArray.forEach(function (tag) {
+                    if (usedTags.includes(tag)) {
+                        // brīdināšana jau tiek veikta addTagColor() funkcijā
+                        return
+                    }
+
+                    TE = document.createElement("block")
+                    TE.setAttribute("class", "tagElement")
+
+                    if (tagColors[tag]) {
+                        TE.style.backgroundColor = tagColors[tag]
+                        D1.appendChild(TE)
+                    } else {
+                        // brīdināšana jau tiek veikta addTagColor() funkcijā
+                        TE.remove()
+                    }
+
+                    usedTags.push(tag)
+                })
+            } else {
+                if (tagColors["No tag"]) {
+                    D1.style.backgroundColor = tagColors["No tag"]
+                } else {
+                    D1.style.backgroundColor = "rgb(0, 0, 0)"
+                }
+            }
+
+            TDE_H.appendChild(D1)
+        }
+
+        addDecor(true)
+        TDE_HC = document.createElement("block")
+        TDE_HC.textContent = text
+        TDE_HC.setAttribute("class", "todayElement_header")
+        TDE_H.appendChild(TDE_HC)
+        addDecor(false)
+
         document.getElementById("todayContainer").appendChild(TDE_H)
     }
 
     if (todayTask.length > 0) {
         todayTask.forEach(function (item) {
-            addHeader(item.name)
+            addHeader(item.name, item.tag)
 
             if (item.description && item.description.length > 0) {
                 TDE_T = document.createElement("block")
@@ -171,13 +224,45 @@ function loadToday() {
                 TDE_T.setAttribute("class", "todayElement_text")
                 document.getElementById("todayContainer").appendChild(TDE_T)
             }
+            addBlank()
         })
-        addBlank()
     } else {
         addHeader("Šodien notikumu nav!")
     }
 }
 
-function addTagColor (item) {
+function addTagColor (item, element) {
+    TC = document.createElement("block")
+    TC.setAttribute("class", "tagContainer")
+    element.appendChild(TC)
 
+    var usedTags = []
+
+    if (item.tag.length > 0) {
+        item.tag.forEach(function (tag) {
+            if (usedTags.includes(tag)) {
+                console.warn("Repeat tag -> " + tag)
+                return
+            }
+
+            TE = document.createElement("block")
+            TE.setAttribute("class", "tagElement")
+
+            if (tagColors[tag]) {
+                TE.style.backgroundColor = tagColors[tag]
+                TC.appendChild(TE)
+            } else {
+                console.warn("no tag color for tag -> " + tag)
+                TE.remove()
+            }
+
+            usedTags.push(tag)
+        })
+    } else {
+        if (tagColors["No tag"]) {
+            TC.style.backgroundColor = tagColors["No tag"]
+        } else {
+            TC.style.backgroundColor = "rgb(0, 0, 0)"
+        }
+    }
 }
