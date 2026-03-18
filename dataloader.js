@@ -67,10 +67,14 @@ function transformScroll(event) {
     event.preventDefault()
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+function loadAll () {
     loadTimeline(data_T, calendarDays)
     loadRelevant(data_R)
     loadToday()
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    loadAll()
 })
 
 function loadTimeline(tasks, days) {
@@ -96,16 +100,29 @@ function loadTimeline(tasks, days) {
         var itemType
         var position
 
-        if (typeof item == "object") {
+        if (typeof item === "object") {
+            let d = new Date(item.date * 1000)
+            let text = d.toString().slice(0, 15)
+
+            TLE_D = document.createElement("div")
+            TLE_D.textContent = text
+            TLE_D.setAttribute("class", "timelineElement_date")
+
             TLE.textContent = item.name
             TLE.style.width = "20%"
+            TLE.appendChild(TLE_D)
             itemType = "task"
-        } else if (typeof item == "number") {
-            //TLE.textContent = item
+        } else if (typeof item === "number") {
+            let d = new Date(item * 1000)
+            let text = d.toString().slice(0, 15)
+
+            TLE.textContent = text
+            TLE.style.fontWeight = "normal"
+            TLE.style.fontSize = "16px"
             itemType = "day"
         }
 
-        if (itemType == "task") {
+        if (itemType === "task") {
             addTagColor(item, TLE)
             if (item.date < todayUnix) {
                 position = "past"
@@ -113,17 +130,17 @@ function loadTimeline(tasks, days) {
                 position = "today"
                 todayTask.push(item)
             }
-        } else if (itemType == "day") {
+        } else if (itemType === "day") {
             if (item < todayUnix) {
                 position = "past"
-            } else if (item == todayUnix) {
+            } else if (item === todayUnix) {
                 position = "today"
             }
         }
 
-        if (position == "past") {
+        if (position === "past") {
             TLE.setAttribute("class", "timelineElement_past")
-        } else if (position == "today") {
+        } else if (position === "today") {
             TLE.setAttribute("class", "timelineElement_today")
             let tempVar = TLE
             todayTaskBox.push(tempVar)
@@ -151,18 +168,18 @@ function loadRelevant(tasks) {
 
 function loadToday() {
     function addBlank () {
-        TDE_blank = document.createElement("block")
+        TDE_blank = document.createElement("div")
         TDE_blank.setAttribute("class", "todayElement_blank")
         document.getElementById("todayContainer").appendChild(TDE_blank)
     }
     addBlank()
 
     function addHeader (text, tags) {
-        TDE_H = document.createElement("block")
+        TDE_H = document.createElement("div")
         TDE_H.setAttribute("class", "todayElement_headerContainer")
 
         function addDecor (bool) {
-            D1 = document.createElement("block")
+            D1 = document.createElement("div")
             D1.setAttribute("class", "todayDecoration_1")
 
             var usedTags = []
@@ -180,7 +197,7 @@ function loadToday() {
                         return
                     }
 
-                    TE = document.createElement("block")
+                    TE = document.createElement("div")
                     TE.setAttribute("class", "tagElement")
 
                     if (tagColors[tag]) {
@@ -205,7 +222,7 @@ function loadToday() {
         }
 
         addDecor(true)
-        TDE_HC = document.createElement("block")
+        TDE_HC = document.createElement("div")
         TDE_HC.textContent = text
         TDE_HC.setAttribute("class", "todayElement_header")
         TDE_H.appendChild(TDE_HC)
@@ -219,7 +236,7 @@ function loadToday() {
             addHeader(item.name, item.tag)
 
             if (item.description && item.description.length > 0) {
-                TDE_T = document.createElement("block")
+                TDE_T = document.createElement("div")
                 TDE_T.textContent = item.description
                 TDE_T.setAttribute("class", "todayElement_text")
                 document.getElementById("todayContainer").appendChild(TDE_T)
@@ -232,7 +249,7 @@ function loadToday() {
 }
 
 function addTagColor (item, element) {
-    TC = document.createElement("block")
+    TC = document.createElement("div")
     TC.setAttribute("class", "tagContainer")
     element.appendChild(TC)
 
@@ -245,7 +262,7 @@ function addTagColor (item, element) {
                 return
             }
 
-            TE = document.createElement("block")
+            TE = document.createElement("div")
             TE.setAttribute("class", "tagElement")
 
             if (tagColors[tag]) {
@@ -263,6 +280,54 @@ function addTagColor (item, element) {
             TC.style.backgroundColor = tagColors["No tag"]
         } else {
             TC.style.backgroundColor = "rgb(0, 0, 0)"
+        }
+    }
+}
+
+function sortTimeline (method, direction, tags) {
+    if (direction !== "reverse") {
+        direction = "normal"
+    }
+
+    if (!method || method === "") {
+        if (tags.length > 0) {
+            var validTags = []
+            tags.forEach(function (tag) {
+                if (tagColors[tag]) {
+                    validTags.push(tag)
+                }
+            })
+            if (validTags.length > 0) {
+                //loadTimeline(data_T, calendarDays)
+                loadRelevant(data_R)
+                loadToday()
+            } else {
+                loadAll()
+            }
+        } else {
+           loadAll()
+        }
+    } else if (method === "tasks") {
+        if (tags.length > 0) {
+            var validTags = []
+            tags.forEach(function (tag) {
+                if (tagColors[tag]) {
+                    validTags.push(tag)
+                }
+            })
+            if (validTags.length > 0) {
+                //loadTimeline(data_T, calendarDays)
+                loadRelevant(data_R)
+                loadToday()
+            } else {
+                //loadTimeline(data_T, calendarDays) the same
+                loadRelevant(data_R)
+                loadToday()
+            }
+        } else {
+            //loadTimeline(data_T, calendarDays) the same
+            loadRelevant(data_R)
+            loadToday()
         }
     }
 }
