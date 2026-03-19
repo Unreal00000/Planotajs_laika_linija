@@ -64,7 +64,4 @@ Iespēja pieslēgties plānotājam no aplikācijas uz mobilās ierīces.
 |    #14     | 04.05. - 08.05. | Prezentēt lietotni.      <br/>                                                                                                  |   Roberts    |
 
 
-Ko mums vajag?
-1)Saskarne html, css + javascript?
-2)Datubāze - serveris
-3)Loģiskā daļa - javasripot
+## Instrukcijas lietotnes izmantošanai un testēšanai
