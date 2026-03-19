@@ -3,10 +3,12 @@
  * description:    Design related functions
 */
 // demonstrācijas dati jeb kā dati tiks sakārtoti
-// datumam izmanto Unix Time Stamp
+// "name" un "description" izsaka kā simbolu virkni (string)
+// datumam "date" izmanto Unix Time Stamp un gadījumā, ja tas netiek ievadīts, lieto null
+// apzīmētājam "tag" izmanto simbolu virkņu masīvu
 const demoData = [
     {"name":"KD programmēšanā","date":1773798400,"tag":["Kontroldarbs"],"description":"Jāpabeidz projekts ar gatavām testējamām funkcijām!"},
-    {"name":"KD matemātikā","date":1773798400,"tag":["Kontroldarbs", "Mājas darbs", "Skola"],"description":"Atvasināšana, funkcijas ekstrēmu noteikšana. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. "},
+    {"name":"KD matemātikā","date":1773898400,"tag":["Kontroldarbs", "Mājas darbs", "Skola"],"description":"Atvasināšana, funkcijas ekstrēmu noteikšana. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. "},
     {"name":"Literatūra, pērļu zvejnieks","date":null,"tag":["Mājas darbs"],"description":"Pabeigt lasīt 'Pērļu zvejnieku'"},
     {"name":"Pica!","date":1774017582,"tag":[],"description":"Picas ballīte piektdienā!"},
     {"name":"ZPD aizstāvēšana","date":1773352800,"tag":["Skola"],"description":""},
@@ -23,6 +25,7 @@ const demoColors = {
 var data = demoData
 var tagColors = demoColors
 
+// dati laika līnijai un aktuālajiem notikumiem bez datuma
 var data_TR = seperateAndSortData(data)
 const data_T = data_TR[0]
 const data_R = data_TR[1]
@@ -33,14 +36,16 @@ const daysFuture = 365
 const today = new Date()
 today.setHours(0, 0, 0, 0)
 const todayUnix = Math.floor(today.getTime() / 1000)
-const calendarDays =  generateDays(daysPast, daysFuture)
+const calendarDays =  generateDays(daysPast, daysFuture) //katra kalendāra diena 2 gadu intervālā
 
+// šodienas notikumi un tiem atbilstošie ielādētie laika līnijas objekti
 var todayTask = []
 var todayTaskBox = []
 
 var firstTime_T = true
 var firstTime_R = true
 
+// sadala ievadītos notikumu datus starp laika līniju un aktuālajiem notikumiem
 function seperateAndSortData(data) {
     var data_t = data.filter(item => item.date)
     var data_r = data.filter(item => !item.date)
@@ -50,6 +55,7 @@ function seperateAndSortData(data) {
     return [data_t, data_r]
 }
 
+// izgatavo dienu masīvu calendarDays konstantei
 function generateDays(daysPast, daysFuture) {
     const result = []
 
@@ -62,6 +68,7 @@ function generateDays(daysPast, daysFuture) {
     return result
 }
 
+// pārvērš vertikālo kustību horizontālā kustībā
 function transformScroll(event) {
     if (!event.deltaY) {
         return
@@ -71,12 +78,14 @@ function transformScroll(event) {
     event.preventDefault()
 }
 
+// nodrošina, ka viss tiek ielādēts atverot tīmekļa vietni
 document.addEventListener("DOMContentLoaded", function () {
     loadTimeline(data_T, calendarDays)
     loadRelevant(data_R)
     loadToday()
 })
 
+// ielādē laika līniju
 function loadTimeline(tasks, calendarDays, filterType, filterDirection, filterTags) {
     let days = [...calendarDays]
 
@@ -84,6 +93,7 @@ function loadTimeline(tasks, calendarDays, filterType, filterDirection, filterTa
         timelineContainer.addEventListener('wheel', transformScroll)
         firstTime_T = false
     } else {
+        // atbrīvojas no iepriekš ielādētiem datiem un informācijas
         todayTaskBox = []
         while (timelineContainer.hasChildNodes()) {
             timelineContainer.removeChild(timelineContainer.firstChild)
@@ -94,9 +104,11 @@ function loadTimeline(tasks, calendarDays, filterType, filterDirection, filterTa
     var greenLight = true
 
     if (filterType === "tasks") {
+        // tiek ielādēti tikai notikumi
         days = tasks
     } else {
         tasks.forEach(item => {
+            // pārbauda, vai vismaz 1 apzīmētājs notikumā sakrīt ar filtru
             if (filterTags) {
                 greenLight = false
                 item.tag.forEach(function (tag) {
@@ -107,6 +119,7 @@ function loadTimeline(tasks, calendarDays, filterType, filterDirection, filterTa
             }
 
             if (greenLight) {
+                // ievieto notikumus dienās
                 var index = days.findIndex(day => (day <= item.date && (day + 86400) > item.date))
 
                 if (index !== -1) {
@@ -123,6 +136,7 @@ function loadTimeline(tasks, calendarDays, filterType, filterDirection, filterTa
     greenLight = true
 
     if (filterDirection === "reverse") {
+        // apvērš dienu secību
         days = days.reverse()
     }
 
