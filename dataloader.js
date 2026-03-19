@@ -97,18 +97,30 @@ function loadTimeline(tasks, calendarDays, filterType, filterDirection, filterTa
         days = tasks
     } else {
         tasks.forEach(item => {
-            var index = days.findIndex(day => (day <= item.date && (day + 86400) > item.date))
+            if (filterTags) {
+                greenLight = false
+                item.tag.forEach(function (tag) {
+                    if (filterTags.includes(tag)) {
+                        greenLight = true
+                    }
+                })
+            }
 
-            if (index !== -1) {
-                days[index] = item
-            } else {
-                index = days.findIndex(day => (day.date <= item.date && (day.date + 86400) > item.date))
+            if (greenLight) {
+                var index = days.findIndex(day => (day <= item.date && (day + 86400) > item.date))
+
                 if (index !== -1) {
-                    days.splice(index + 1, 0, item)
+                    days[index] = item
+                } else {
+                    index = days.findIndex(day => (day.date <= item.date && (day.date + 86400) > item.date))
+                    if (index !== -1) {
+                        days.splice(index + 1, 0, item)
+                    }
                 }
             }
         })
     }
+    greenLight = true
 
     if (filterDirection === "reverse") {
         days = days.reverse()
@@ -121,20 +133,6 @@ function loadTimeline(tasks, calendarDays, filterType, filterDirection, filterTa
         var position
 
         if (typeof item === "object") {
-            if (filterTags) {
-                greenLight = false
-                item.tag.forEach(function (tag) {
-                    if (filterTags.includes(tag)) {
-                        greenLight = true
-                    }
-                })
-            }
-
-            if (greenLight === false) {
-                greenLight = true
-                return
-            }
-
             let d = new Date(item.date * 1000)
             let text = d.toString().slice(0, 15)
 
@@ -184,7 +182,6 @@ function loadTimeline(tasks, calendarDays, filterType, filterDirection, filterTa
         }
 
         document.getElementById("timelineContainer").appendChild(TLE)
-        greenLight = true
     })
 }
 
@@ -383,8 +380,7 @@ function filterTimeline (method, direction, tags) {
     filterTimeline_2()
 }
 
-//Jāsalabo caurums, kas paliek, kad izņem notikumu
-setTimeout(() => {
-    filterTimeline("default", "normal", ["Skola"])
-    console.log("Executed after 3 seconds");
-}, 3000);
+// setTimeout(() => {
+//     filterTimeline("default", "normal", ["Skola"])
+//     console.log("Executed after 3 seconds");
+// }, 3000);
