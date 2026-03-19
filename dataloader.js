@@ -139,13 +139,14 @@ function loadTimeline(tasks, calendarDays, filterType, filterDirection, filterTa
         // apvērš dienu secību
         days = days.reverse()
     }
-
+    // uztaisa objektus
     days.forEach(function (item) {
         TLE = document.createElement("button")
         TLE.setAttribute("class", "timelineElement")
         var itemType
         var position
 
+        // izšķir objektus pa notikumiem un parastajām dienām, maina dažus dizaina elementus, ja nepieciešams
         if (typeof item === "object") {
             let d = new Date(item.date * 1000)
             let text = d.toString().slice(0, 15)
@@ -168,6 +169,7 @@ function loadTimeline(tasks, calendarDays, filterType, filterDirection, filterTa
             itemType = "day"
         }
 
+        // nosaka vai objekts atrodas pagātnē vai tagadnē
         if (itemType === "task") {
             addTagColor(item, TLE)
             if (item.date < todayUnix) {
@@ -183,7 +185,7 @@ function loadTimeline(tasks, calendarDays, filterType, filterDirection, filterTa
                 position = "today"
             }
         }
-
+        // atbilstoši maina dizainu
         if (position === "past") {
             TLE.setAttribute("class", "timelineElement_past")
         } else if (position === "today") {
@@ -194,16 +196,18 @@ function loadTimeline(tasks, calendarDays, filterType, filterDirection, filterTa
                 timelineContainer.scrollLeft = todayTaskBox[0].offsetLeft - timelineContainer.clientWidth / 4 + todayTaskBox[0].clientWidth / 2
             })
         }
-
+        // pievieno objektus tilpnei
         document.getElementById("timelineContainer").appendChild(TLE)
     })
 }
 
+// ielādē aktuālos notikumus
 function loadRelevant(tasks, filterTags) {
     if (firstTime_R) {
         relevantContainer.addEventListener('wheel', transformScroll)
         firstTime_R = false
     } else {
+        // atbrīvojas no iepriekš ielādētiem datiem un informācijas
         while (relevantContainer.hasChildNodes()) {
             relevantContainer.removeChild(relevantContainer.firstChild)
         }
@@ -212,6 +216,7 @@ function loadRelevant(tasks, filterTags) {
     var greenLight = true
 
     tasks.forEach(function (item) {
+        // pārbauda, vai vismaz 1 apzīmētājs notikumā sakrīt ar filtru
         if (filterTags) {
             greenLight = false
             item.tag.forEach(function (tag) {
@@ -221,6 +226,7 @@ function loadRelevant(tasks, filterTags) {
             })
         }
         if (greenLight) {
+            // uztaisa un pievieno objektus tilpnei
             RE = document.createElement("button")
             RE.textContent = item.name
             RE.setAttribute("class", "relevantElement")
@@ -231,22 +237,24 @@ function loadRelevant(tasks, filterTags) {
     })
 }
 
+// ielādē šodienas notikumu papildinformāciju
 function loadToday() {
+    // atbrīvojas no iepriekš ielādētiem datiem un informācijas
     while (todayContainer.hasChildNodes()) {
         todayContainer.removeChild(todayContainer.firstChild)
     }
-
+    // pievieno tukšu objektu, kā daudzfunkcionālu atkāpi
     function addBlank () {
         TDE_blank = document.createElement("div")
         TDE_blank.setAttribute("class", "todayElement_blank")
         document.getElementById("todayContainer").appendChild(TDE_blank)
     }
     addBlank()
-
+    // pievieno notikuma nosaukuma virsrakstu
     function addHeader (text, tags) {
         TDE_H = document.createElement("div")
         TDE_H.setAttribute("class", "todayElement_headerContainer")
-
+        // pievieno apzīmētājiem atbilstošās krāsu dekorācijas. True = secīgi, false = apgrieztā secībā
         function addDecor (bool) {
             D1 = document.createElement("div")
             D1.setAttribute("class", "todayDecoration_1")
@@ -261,6 +269,7 @@ function loadToday() {
 
             if (tagsArray.length > 0) {
                 tagsArray.forEach(function (tag) {
+                    // pārbauda vai lieki neatkārtojas apzīmētāji
                     if (usedTags.includes(tag)) {
                         // brīdināšana jau tiek veikta addTagColor() funkcijā
                         return
@@ -269,6 +278,7 @@ function loadToday() {
                     TE = document.createElement("div")
                     TE.setAttribute("class", "tagElement")
 
+                    // pārbauda vai apzīmētājam ir atbilstoša krāsa
                     if (tagColors[tag]) {
                         TE.style.backgroundColor = tagColors[tag]
                         D1.appendChild(TE)
@@ -290,6 +300,7 @@ function loadToday() {
             TDE_H.appendChild(D1)
         }
 
+        // objekti virsrakstā
         addDecor(true)
         TDE_HC = document.createElement("div")
         TDE_HC.textContent = text
@@ -299,7 +310,7 @@ function loadToday() {
 
         document.getElementById("todayContainer").appendChild(TDE_H)
     }
-
+    // šeit notiek pati ielādēšanas daļa šodienas notikumiem
     if (todayTask.length > 0) {
         todayTask.forEach(function (item) {
             addHeader(item.name, item.tag)
@@ -319,6 +330,7 @@ function loadToday() {
     todayTask = []
 }
 
+// pievieno apzīmētājiem atbilstošas krāsas notikumu objektiem
 function addTagColor (item, element) {
     TC = document.createElement("div")
     TC.setAttribute("class", "tagContainer")
@@ -328,6 +340,7 @@ function addTagColor (item, element) {
 
     if (item.tag.length > 0) {
         item.tag.forEach(function (tag) {
+            // pārbauda vai lieki neatkārtojas apzīmētāji
             if (usedTags.includes(tag)) {
                 console.warn("Repeat tag -> " + tag)
                 return
@@ -336,6 +349,7 @@ function addTagColor (item, element) {
             TE = document.createElement("div")
             TE.setAttribute("class", "tagElement")
 
+            // pārbauda vai apzīmētājam ir atbilstoša krāsa
             if (tagColors[tag]) {
                 TE.style.backgroundColor = tagColors[tag]
                 TC.appendChild(TE)
@@ -355,7 +369,7 @@ function addTagColor (item, element) {
     }
 }
 
-// methods: "" vai "tasks", directions: "" vai "reverse"
+// filtrē notikumus. Methods: "" vai "tasks", directions: "" vai "reverse", tags: ["Apzīmētājs 1", "Apzīmētājs 2" utt.]
 function filterTimeline (method, direction, tags) {
     if (direction !== "reverse") {
         direction = "normal"
@@ -364,37 +378,35 @@ function filterTimeline (method, direction, tags) {
     if (!method || method === "" || method === "default") {
         method = "default"
     }
-
+    // apakšfunkcija, lai samazinātu koda garumu, ielādē par jaunu notikumus
     function filterTimeline_2 () {
-
-        function filterTimeline_3 () {
-            loadTimeline(data_T, calendarDays, method, direction)
-            loadRelevant(data_R)
-            loadToday()
-        }
-
-        if (tags && tags.length > 0) {
-            var validTags = []
-            tags.forEach(function (tag) {
-                if (tagColors[tag]) {
-                    validTags.push(tag)
-                }
-            })
-            if (validTags.length > 0) {
-                loadTimeline(data_T, calendarDays, method, direction, validTags)
-                loadRelevant(data_R, validTags)
-                loadToday()
-            } else {
-                filterTimeline_3()
-            }
-        } else {
-            filterTimeline_3()
-        }
+        loadTimeline(data_T, calendarDays, method, direction)
+        loadRelevant(data_R)
+        loadToday()
     }
-    filterTimeline_2()
+    // pārbaude atlasītajiem apzīmētāju filtriem
+    if (tags && tags.length > 0) {
+        var validTags = []
+        tags.forEach(function (tag) {
+            if (tagColors[tag]) {
+                validTags.push(tag)
+            }
+        })
+        if (validTags.length > 0) {
+            loadTimeline(data_T, calendarDays, method, direction, validTags)
+            loadRelevant(data_R, validTags)
+            loadToday()
+        } else {
+            filterTimeline_2()
+        }
+    } else {
+        filterTimeline_2()
+    }
+
 }
 
+// palaist filtrēšanas funkciju 3 sekundes pēc lapas ielādēšanas
 // setTimeout(() => {
 //     filterTimeline("default", "normal", ["Skola"])
-//     console.log("Executed after 3 seconds");
-// }, 3000);
+//     console.log("Executed after 3 seconds")
+// }, 3000)
