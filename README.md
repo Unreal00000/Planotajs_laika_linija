@@ -65,3 +65,14 @@ Iespēja pieslēgties plānotājam no aplikācijas uz mobilās ierīces.
 
 
 ## Instrukcijas lietotnes izmantošanai un testēšanai
+
+Lai palaistu aplikāciju ir nepieciešams ielādēt docker desktop.
+Klonē projektu no GitHub.
+Kad tas ir izdarīts, tad terminali raksti: "docker build -t planner-app ."
+Tad raksti: "docker run -p 3000:3000 --name planner planner-app"
+Tad: "docker start -a planner"
+Ja vēlies, lai visi dati saglabājas lokāli pēc restartēšanas, tad ar Windows raksti šo:
+"docker run -p 3000:3000 --name planner -v %cd%:/app planner-app"
+Bet ja ar Mac vai Linux, tad šādi:
+"docker run -p 3000:3000 --name planner -v $(pwd):/app planner-app"
+Ja vēlies, lai serveris strada tikai fona, tad pietiek "docker start -a planner" vietā var "docker start planner" 
