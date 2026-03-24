@@ -6,24 +6,15 @@
 // "name" un "description" izsaka kā simbolu virkni (string)
 // datumam "date" izmanto Unix Time Stamp un gadījumā, ja tas netiek ievadīts, lieto null
 // apzīmētājam "tag" izmanto simbolu virkņu masīvu
-const demoData = [
-    {"name":"KD programmēšanā","date":1773798400,"tag":["Kontroldarbs"],"description":"Jāpabeidz projekts ar gatavām testējamām funkcijām!"},
-    {"name":"KD matemātikā","date":1773898400,"tag":["Kontroldarbs", "Mājas darbs", "Skola"],"description":"Atvasināšana, funkcijas ekstrēmu noteikšana. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. "},
-    {"name":"Literatūra, pērļu zvejnieks","date":null,"tag":["Mājas darbs"],"description":"Pabeigt lasīt 'Pērļu zvejnieku'"},
-    {"name":"Pica!","date":1774017582,"tag":[],"description":"Picas ballīte piektdienā!"},
-    {"name":"ZPD aizstāvēšana","date":1773352800,"tag":["Skola"],"description":""},
-    {"name":"Kamermūzikas vakars","date":null,"tag":["Mājas darbs","Skola"],"description":"Gatavoties kamermūzikas vakaram."},
-]
-// saglabāti apzīmētāji un tiem atbilstošās krāsas
-const demoColors = {
-    "No tag":"rgb(0, 0, 0)", // "No tag" nav pievienojams vai nodzēšams, bet tā krāsa ir rediģējama
-    "Kontroldarbs":"rgb(255,0,0)",
-    "Mājas darbs":"rgb(0,166,255)",
-    "Skola":"rgb(102,0,255)",
-}
 
-var data = demoData
-var tagColors = demoColors
+const timelineContainer = document.getElementById("timelineContainer");
+const relevantContainer = document.getElementById("relevantContainer");
+const todayContainer = document.getElementById("todayContainer");
+
+var data = []
+var tagColors = {
+    "No tag":"rgb(0, 0, 0)"
+}
 
 // dati laika līnijai un aktuālajiem notikumiem bez datuma
 var data_TR = seperateAndSortData(data)
@@ -77,13 +68,27 @@ function transformScroll(event) {
     event.currentTarget.scrollLeft += event.deltaY + event.deltaX
     event.preventDefault()
 }
+document.addEventListener("DOMContentLoaded", async function () {
 
-// nodrošina, ka viss tiek ielādēts atverot tīmekļa vietni
-document.addEventListener("DOMContentLoaded", function () {
-    loadTimeline(data_T, calendarDays)
-    loadRelevant(data_R)
-    loadToday()
-})
+    const res = await fetch("/events");
+    const dbData = await res.json();
+
+    // pārvērš DB datus uz tavu formātu
+    data = dbData.events.map(text => ({
+        name: text,
+        date: null,
+        tag: [],
+        description: ""
+    }));
+
+    const data_TR = seperateAndSortData(data);
+    const data_T = data_TR[0];
+    const data_R = data_TR[1];
+
+    loadTimeline(data_T, calendarDays);
+    loadRelevant(data_R);
+    loadToday();
+});
 
 // ielādē laika līniju
 function loadTimeline(tasks, calendarDays, filterType, filterDirection, filterTags) {

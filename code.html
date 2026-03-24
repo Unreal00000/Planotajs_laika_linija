@@ -45,29 +45,6 @@
       updateTimeline(data.events);
     }
 
-    // Atjauno zilos blokus
-    function updateTimeline(events) {
-      const container = document.getElementById("timelineContainer");
-      container.innerHTML = "";
-
-      events.forEach(text => {
-        const el = document.createElement("div");
-        el.className = "timelineElement";
-        el.innerText = text;
-        container.appendChild(el);
-      });
-    }
-
-    // Kad lapu ielādē → ielādē arī iepriekšējos notikumus
-    async function loadEvents() {
-      const res = await fetch("/events");
-      const data = await res.json();
-      updateTimeline(data.events);
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-      loadEvents(); // iepriekšējie notikumi
-    });
 
     // Sarkanais bloks → dzēšana
     async function function_2() {
