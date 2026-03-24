@@ -5,7 +5,14 @@ async function loadDataFromServer() {
         const data = await res.json();
 
         // sadala notikumus ar datumu un bez datuma
-        var data_TR = seperateAndSortData(data.events.map(text => ({name: text, date: null, tag: [], description: ""})));
+        var data_TR = seperateAndSortData(
+            data.events.map(ev => ({
+                name: ev.name,
+                date: ev.date ? new Date(ev.date) : null, // ja ir datums
+                tag: ev.tag || [],
+                description: ev.description || ""
+            }))
+        );
         return data_TR;
     } catch (err) {
         console.error("Neizdevās ielādēt datus no servera:", err);
