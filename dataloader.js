@@ -20,6 +20,15 @@ const demoColors = {
 var data = demoData
 var tagColors = demoColors
 
+const timelineContainer = document.getElementById("timelineContainer");
+const relevantContainer = document.getElementById("relevantContainer");
+const todayContainer = document.getElementById("todayContainer");
+
+var data = []
+var tagColors = {
+    "No tag":"rgb(0, 0, 0)"
+}
+
 
 
 // nodrošina, ka viss tiek ielādēts atverot tīmekļa vietni
