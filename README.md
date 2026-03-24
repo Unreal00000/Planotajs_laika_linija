@@ -65,7 +65,6 @@ Iespēja pieslēgties plānotājam no aplikācijas uz mobilās ierīces.
 
 
 ## Instrukcijas lietotnes izmantošanai un testēšanai
-
 Lai palaistu aplikāciju ir nepieciešams ielādēt docker desktop.
 Klonē projektu no GitHub.
 Kad tas ir izdarīts, tad terminali raksti: "docker build -t planner-app ."
