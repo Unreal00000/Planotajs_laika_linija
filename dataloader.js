@@ -24,19 +24,32 @@ const timelineContainer = document.getElementById("timelineContainer");
 const relevantContainer = document.getElementById("relevantContainer");
 const todayContainer = document.getElementById("todayContainer");
 
-var data = []
-var tagColors = {
-    "No tag":"rgb(0, 0, 0)"
+// var data = []
+// var tagColors = {
+//     "No tag":"rgb(0, 0, 0)"
+// }
+
+
+
+function refreshAll(eventsFromServer) {
+    data = eventsFromServer.map(e => ({
+        name: e.title,
+        date: e.date ? parseInt(e.date) : null,
+        tag: Array.isArray(e.tag) ? e.tag : [e.tag],
+        description: e.description || ""
+    }));
+
+    // Šeit vari izsaukt funkcijas, kas atjauno UI
+    loadTimeline(data, calendarDays);
+    loadRelevant(data);
+    loadToday();
 }
 
-
-
-// nodrošina, ka viss tiek ielādēts atverot tīmekļa vietni
-document.addEventListener("DOMContentLoaded", function () {
-    loadTimeline(data_T, calendarDays)
-    loadRelevant(data_R)
-    loadToday()
-})
+document.addEventListener("DOMContentLoaded", async function () {
+    const res = await fetch("/events");
+    const dataRes = await res.json();
+    refreshAll(dataRes.events);
+});
 
 // ielādē laika līniju
 function loadTimeline(tasks, calendarDays, filterType, filterDirection, filterTags) {
@@ -358,8 +371,3 @@ function filterTimeline (method, direction, tags) {
 
 }
 
-// palaist filtrēšanas funkciju 3 sekundes pēc lapas ielādēšanas
-// setTimeout(() => {
-//     filterTimeline("default", "normal", ["Skola"])
-//     console.log("Executed after 3 seconds")
-// }, 3000)
