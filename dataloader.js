@@ -25,65 +25,36 @@ const demoColors = {
 var data = demoData
 var tagColors = demoColors
 
-// dati laika līnijai un aktuālajiem notikumiem bez datuma
-var data_TR = seperateAndSortData(data)
-const data_T = data_TR[0]
-const data_R = data_TR[1]
+const timelineContainer = document.getElementById("timelineContainer");
+const relevantContainer = document.getElementById("relevantContainer");
+const todayContainer = document.getElementById("todayContainer");
 
-// laiks tiek ielādēts tikai 1 reizi, kad programma sāk darboties
-const daysPast = 365
-const daysFuture = 365
-const today = new Date()
-today.setHours(0, 0, 0, 0)
-const todayUnix = Math.floor(today.getTime() / 1000)
-const calendarDays =  generateDays(daysPast, daysFuture) //katra kalendāra diena 2 gadu intervālā
+// var data = []
+// var tagColors = {
+//     "No tag":"rgb(0, 0, 0)"
+// }
 
-// šodienas notikumi un tiem atbilstošie ielādētie laika līnijas objekti
-var todayTask = []
-var todayTaskBox = []
 
-var firstTime_T = true
-var firstTime_R = true
 
-// sadala ievadītos notikumu datus starp laika līniju un aktuālajiem notikumiem
-function seperateAndSortData(data) {
-    var data_t = data.filter(item => item.date)
-    var data_r = data.filter(item => !item.date)
+function refreshAll(eventsFromServer) {
+    data = eventsFromServer.map(e => ({
+        name: e.title,
+        date: e.date ? parseInt(e.date) : null,
+        tag: Array.isArray(e.tag) ? e.tag : [e.tag],
+        description: e.description || ""
+    }));
 
-    data_t.sort((a, b) => a.date - b.date)
-
-    return [data_t, data_r]
+    // Šeit vari izsaukt funkcijas, kas atjauno UI
+    loadTimeline(data, calendarDays);
+    loadRelevant(data);
+    loadToday();
 }
 
-// izgatavo dienu masīvu calendarDays konstantei
-function generateDays(daysPast, daysFuture) {
-    const result = []
-
-    for (let i = -daysPast; i <= daysFuture; i++) {
-        const d = new Date(today)
-        d.setDate(today.getDate() + i)
-        result.push(Math.floor(d.getTime() / 1000))
-    }
-
-    return result
-}
-
-// pārvērš vertikālo kustību horizontālā kustībā
-function transformScroll(event) {
-    if (!event.deltaY) {
-        return
-    }
-
-    event.currentTarget.scrollLeft += event.deltaY + event.deltaX
-    event.preventDefault()
-}
-
-// nodrošina, ka viss tiek ielādēts atverot tīmekļa vietni
-document.addEventListener("DOMContentLoaded", function () {
-    loadTimeline(data_T, calendarDays)
-    loadRelevant(data_R)
-    loadToday()
-})
+document.addEventListener("DOMContentLoaded", async function () {
+    const res = await fetch("/events");
+    const dataRes = await res.json();
+    refreshAll(dataRes.events);
+});
 
 // ielādē laika līniju
 function loadTimeline(tasks, calendarDays, filterType, filterDirection, filterTags) {
@@ -405,8 +376,3 @@ function filterTimeline (method, direction, tags) {
 
 }
 
-// palaist filtrēšanas funkciju 3 sekundes pēc lapas ielādēšanas
-// setTimeout(() => {
-//     filterTimeline("default", "normal", ["Skola"])
-//     console.log("Executed after 3 seconds")
-// }, 3000)
