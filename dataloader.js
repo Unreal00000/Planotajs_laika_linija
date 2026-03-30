@@ -1,3 +1,8 @@
+/* file:           dataloader.js
+ * last changed:   12.03.2026
+ * description:    Design related functions
+*/
+// demonstrācijas dati jeb kā dati tiks sakārtoti
 // "name" un "description" izsaka kā simbolu virkni (string)
 // datumam "date" izmanto Unix Time Stamp un gadījumā, ja tas netiek ievadīts, lieto null
 // apzīmētājam "tag" izmanto simbolu virkņu masīvu
@@ -20,7 +25,58 @@ const demoColors = {
 var data = demoData
 var tagColors = demoColors
 
+// dati laika līnijai un aktuālajiem notikumiem bez datuma
+var data_TR = seperateAndSortData(data)
+const data_T = data_TR[0]
+const data_R = data_TR[1]
 
+// laiks tiek ielādēts tikai 1 reizi, kad programma sāk darboties
+const daysPast = 365
+const daysFuture = 365
+const today = new Date()
+today.setHours(0, 0, 0, 0)
+const todayUnix = Math.floor(today.getTime() / 1000)
+const calendarDays =  generateDays(daysPast, daysFuture) //katra kalendāra diena 2 gadu intervālā
+
+// šodienas notikumi un tiem atbilstošie ielādētie laika līnijas objekti
+var todayTask = []
+var todayTaskBox = []
+
+var firstTime_T = true
+var firstTime_R = true
+
+// sadala ievadītos notikumu datus starp laika līniju un aktuālajiem notikumiem
+function seperateAndSortData(data) {
+    var data_t = data.filter(item => item.date)
+    var data_r = data.filter(item => !item.date)
+
+    data_t.sort((a, b) => a.date - b.date)
+
+    return [data_t, data_r]
+}
+
+// izgatavo dienu masīvu calendarDays konstantei
+function generateDays(daysPast, daysFuture) {
+    const result = []
+
+    for (let i = -daysPast; i <= daysFuture; i++) {
+        const d = new Date(today)
+        d.setDate(today.getDate() + i)
+        result.push(Math.floor(d.getTime() / 1000))
+    }
+
+    return result
+}
+
+// pārvērš vertikālo kustību horizontālā kustībā
+function transformScroll(event) {
+    if (!event.deltaY) {
+        return
+    }
+
+    event.currentTarget.scrollLeft += event.deltaY + event.deltaX
+    event.preventDefault()
+}
 
 // nodrošina, ka viss tiek ielādēts atverot tīmekļa vietni
 document.addEventListener("DOMContentLoaded", function () {
