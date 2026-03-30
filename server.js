@@ -5,42 +5,37 @@ const sqlite3 = require("sqlite3").verbose();
 const app = express();
 const PORT = 3000;
 
-// Izveido vai atver datubāzi
 const basePath = process.pkg ? path.dirname(process.execPath) : __dirname;
 const db = new sqlite3.Database(path.join(basePath, "events.db"));
 
 app.use(express.json());
-
-
 app.use(express.static(basePath));
 
-
+// DB
 db.run(`
     CREATE TABLE IF NOT EXISTS events (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT,
-        date TEXT,
+        date INTEGER,
         description TEXT,
         tag TEXT
     )
 `);
 
-// Servē HTML
+// ROOT
 app.get("/", (req, res) => {
     res.sendFile(path.join(basePath, "code.html"));
 });
-app.post("/signal", (req, res) => {
-    const message = req.body.message;
 
-    console.log("Received from client:", message);
-
-    // piemērs – pārveido tekstu
-    const modifiedMessage = message.toUpperCase();
-
-    res.json({ modifiedMessage });
+// GET EVENTS
+app.get("/events", (req, res) => {
+    db.all("SELECT * FROM events ORDER BY id ASC", (err, rows) => {
+        if (err) return res.status(500).json({ error: "DB error" });
+        res.json({ events: rows });
+    });
 });
 
-// Pievienot jaunu notikumu
+// ADD
 app.post("/add-event", (req, res) => {
     const { title, date, description, tag } = req.body;
 
@@ -61,7 +56,7 @@ app.post("/add-event", (req, res) => {
     );
 });
 
-
+// DELETE
 app.post("/delete-event", (req, res) => {
     const { id } = req.body;
 
@@ -76,14 +71,7 @@ app.post("/delete-event", (req, res) => {
     });
 });
 
-// Atgriezt visus notikumus
-app.get("/events", (req, res) => {
-    db.all("SELECT * FROM events ORDER BY id ASC", (err, rows) => {
-        if (err) return res.status(500).json({ error: "DB error" });
-        res.json({ events: rows });
-    });
-});
-
+// EDIT
 app.post("/edit-event", (req, res) => {
     const { id, title, date, description, tag } = req.body;
 
@@ -104,7 +92,6 @@ app.post("/edit-event", (req, res) => {
     );
 });
 
-    app.listen(PORT, () => {
-        console.log(`Server running at http://localhost:${PORT}`);
-        console.log(`Atver pārlūkprogrammu un ej uz http://localhost:${PORT}`);
-    })
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+});
