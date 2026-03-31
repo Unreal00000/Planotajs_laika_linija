@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:16
-    container_name: planner_db
+    container_name: planner
     environment:
       POSTGRES_DB: planner
       POSTGRES_USER: planner_user
