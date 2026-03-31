@@ -1,7 +1,3 @@
-/* file:           dataloader.js
- * last changed:   12.03.2026
- * description:    Design related functions
-*/
 // demonstrācijas dati jeb kā dati tiks sakārtoti
 // "name" un "description" izsaka kā simbolu virkni (string)
 // datumam "date" izmanto Unix Time Stamp un gadījumā, ja tas netiek ievadīts, lieto null
@@ -260,7 +256,7 @@ function loadToday() {
             D1.setAttribute("class", "todayDecoration_1")
 
             var usedTags = []
-            var tagsArray
+            var tagsArray = []
             if (bool) {
                 tagsArray = tags
             } else {
