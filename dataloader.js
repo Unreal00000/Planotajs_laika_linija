@@ -251,13 +251,13 @@ function loadToday() {
         TDE_H = document.createElement("div")
         TDE_H.setAttribute("class", "todayElement_headerContainer")
         // pievieno apzīmētājiem atbilstošās krāsu dekorācijas. True = secīgi, false = apgrieztā secībā
-        function addDecor (bool) {
+        function addDecor (boolVal) {
             D1 = document.createElement("div")
             D1.setAttribute("class", "todayDecoration_1")
 
             var usedTags = []
             var tagsArray = []
-            if (bool) {
+            if (boolVal) {
                 tagsArray = tags
             } else {
                 tagsArray = tags.reverse()
@@ -320,7 +320,7 @@ function loadToday() {
             addBlank()
         })
     } else {
-        addHeader("Šodien notikumu nav!")
+        addHeader("Šodien notikumu nav!", [])
     }
 
     todayTask = []
