@@ -1,17 +1,19 @@
 // ================= GLOBAL =================
 let data = [];
+let currentFilter = null;
 
 const timelineContainer = document.getElementById("timelineContainer");
 const relevantContainer = document.getElementById("relevantContainer");
 const todayContainer = document.getElementById("todayContainer");
 
-const todayUnix = Math.floor(Date.now() / 1000);
+const todayUnixStart = Math.floor(new Date().setHours(0,0,0,0)/1000);
+const todayUnixEnd = todayUnixStart + 86400;
 
 // TAG KRĀSAS
 const tagColors = {
-    "Skolas darbi": "purple",
-    "Ārpus skolas darbi": "green",
-    "No tag": "black"
+    "skolas darbi": "purple",
+    "ārpus skolas darbi": "green",
+    "no tag": "black"
 };
 
 // ================= LOAD =================
@@ -29,27 +31,37 @@ window.refreshFromServer = async function () {
         name: e.title,
         date: e.date,
         description: e.description,
-        tag: [e.tag]
+        tag: [normalizeTag(e.tag)]
     }));
 
     renderAll();
 };
 
+// ================= UTILS =================
+function normalizeTag(tag) {
+    if (!tag) return "no tag";
+    return tag.trim().toLowerCase();
+}
+
+function passesFilter(item) {
+    if (!currentFilter) return true;
+    return item.tag.includes(currentFilter);
+}
+
 // ================= RENDER =================
-function renderAll(filterTags = null) {
-    renderTimeline(filterTags);
-    renderRelevant(filterTags);
-    renderToday(filterTags);
+function renderAll() {
+    renderTimeline();
+    renderRelevant();
+    renderToday();
 }
 
 // ================= TIMELINE =================
-function renderTimeline(filterTags) {
+function renderTimeline() {
     timelineContainer.innerHTML = "";
 
-    let filtered = filterData(filterTags);
-
-    filtered
-        .filter(e => e.date)
+    data
+        .filter(e => e.date !== null && e.date !== undefined)
+        .filter(passesFilter)
         .sort((a, b) => a.date - b.date)
         .forEach(item => {
 
@@ -57,51 +69,48 @@ function renderTimeline(filterTags) {
 
             let className = "timelineElement";
 
-            if (item.date < todayUnix) className = "timelineElement_past";
-            else if (Math.abs(item.date - todayUnix) < 86400) className = "timelineElement_today";
+            if (item.date < todayUnixStart) className = "timelineElement_past";
+            else if (item.date >= todayUnixStart && item.date < todayUnixEnd) className = "timelineElement_today";
 
             el.className = className;
-
             el.textContent = item.name;
 
             let dateDiv = document.createElement("div");
             dateDiv.className = "timelineElement_date";
             dateDiv.textContent = new Date(item.date * 1000).toLocaleDateString();
-
             el.appendChild(dateDiv);
 
             addTagColor(item, el);
-
             timelineContainer.appendChild(el);
         });
 }
 
 // ================= RELEVANT =================
-function renderRelevant(filterTags) {
+function renderRelevant() {
     relevantContainer.innerHTML = "";
 
-    let filtered = filterData(filterTags);
+    data
+        .filter(e => e.date === null || e.date === undefined)
+        .filter(passesFilter)
+        .forEach(item => {
 
-    filtered.forEach(item => {
-        let el = document.createElement("div");
-        el.className = "relevantElement";
-        el.textContent = item.name;
+            let el = document.createElement("div");
+            el.className = "relevantElement";
+            el.textContent = item.name;
 
-        addTagColor(item, el);
-
-        relevantContainer.appendChild(el);
-    });
+            addTagColor(item, el);
+            relevantContainer.appendChild(el);
+        });
 }
 
 // ================= TODAY =================
-function renderToday(filterTags) {
+function renderToday() {
     todayContainer.innerHTML = "";
 
-    let filtered = filterData(filterTags);
-
-    let todayEvents = filtered.filter(e =>
-        e.date && Math.abs(e.date - todayUnix) < 86400
-    );
+    let todayEvents = data
+        .filter(e => e.date !== null && e.date !== undefined)
+        .filter(e => e.date >= todayUnixStart && e.date < todayUnixEnd)
+        .filter(passesFilter);
 
     if (todayEvents.length === 0) {
         todayContainer.innerHTML = "<h2>Šodien nav notikumu</h2>";
@@ -129,32 +138,24 @@ function addTagColor(item, element) {
     item.tag.forEach(tag => {
         let t = document.createElement("div");
         t.className = "tagElement";
-        t.style.backgroundColor = tagColors[tag] || tagColors["No tag"];
+        t.style.backgroundColor = tagColors[tag] || tagColors["no tag"];
         tagDiv.appendChild(t);
     });
 
     element.appendChild(tagDiv);
 }
 
-// ================= FILTER =================
-function filterData(filterTags) {
-    if (!filterTags) return data;
-
-    return data.filter(item =>
-        item.tag.some(tag => filterTags.includes(tag))
-    );
-}
-
-// ================= BUTTON FUNCTIONS =================
+// ================= ADD =================
 window.addEvent = async function () {
     const name = prompt("Nosaukums:");
-    const dateInput = prompt("Datums (YYYY-MM-DD):");
+    if (!name) return;
+
+    const dateInput = prompt("Datums (YYYY-MM-DD, tukšs = nav):");
     const description = prompt("Apraksts:");
     const tag = prompt("Tags (Skolas darbi / Ārpus skolas darbi):");
 
-    if (!name || !dateInput) return;
-
-    const date = Math.floor(new Date(dateInput).getTime() / 1000);
+    let date = null;
+    if (dateInput) date = Math.floor(new Date(dateInput).getTime() / 1000);
 
     await fetch("/add-event", {
         method: "POST",
@@ -165,6 +166,7 @@ window.addEvent = async function () {
     refreshFromServer();
 };
 
+// ================= DELETE =================
 window.deleteEvent = async function () {
     let msg = "ID:\n";
     data.forEach(e => msg += `${e.id}: ${e.name}\n`);
@@ -181,6 +183,7 @@ window.deleteEvent = async function () {
     refreshFromServer();
 };
 
+// ================= EDIT (LATVISKI) =================
 window.editEvent = async function () {
     let msg = "ID:\n";
     data.forEach(e => msg += `${e.id}: ${e.name}\n`);
@@ -188,31 +191,74 @@ window.editEvent = async function () {
     const id = prompt(msg);
     if (!id) return;
 
-    const name = prompt("Jauns nosaukums:");
-    const dateInput = prompt("Jauns datums (YYYY-MM-DD):");
-    const description = prompt("Jauns apraksts:");
-    const tag = prompt("Tags:");
+    const field = prompt("Ko vēlies rediģēt? (nosaukums / datums / apraksts / tags)");
+    if (!field) return;
 
-    const date = Math.floor(new Date(dateInput).getTime() / 1000);
+    let body = { id: parseInt(id) };
+
+    if (field === "nosaukums") {
+        const val = prompt("Jauns nosaukums:");
+        if (val) body.title = val;
+    }
+
+    if (field === "datums") {
+        const val = prompt("Jauns datums (YYYY-MM-DD) vai ieraksti DELETE lai dzēstu:");
+        if (val === "DELETE") body.date = null;
+        else if (val) body.date = Math.floor(new Date(val).getTime() / 1000);
+    }
+
+    if (field === "apraksts") {
+        const val = prompt("Jauns apraksts vai DELETE:");
+        if (val === "DELETE") body.description = "";
+        else if (val) body.description = val;
+    }
+
+    if (field === "tags") {
+        const val = prompt("Jauns tags:");
+        if (val) body.tag = val;
+    }
 
     await fetch("/edit-event", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            id: parseInt(id),
-            title: name,
-            date,
-            description,
-            tag
-        })
+        body: JSON.stringify(body)
     });
 
     refreshFromServer();
-};
 
+// ================= FILTER (FIXED) =================
 window.filterTag = function () {
-    const tag = prompt("Filtrs (Skolas darbi / Ārpus skolas darbi):");
-    if (!tag) return;
+    const input = prompt(
+        "Filtrs:\n- Skolas darbi\n- Ārpus skolas darbi\n- Rādīt visus"
+    );
 
-    renderAll([tag]);
+    if (!input) {
+        // tukšs → noņem filtru
+        currentFilter = null;
+        renderAll();
+        return;
+    }
+
+    const normalized = normalizeTag(input);
+
+    if (normalized === "rādīt visus") {
+        currentFilter = null;
+        renderAll();
+        return;
+    }
+
+    if (normalized === "skolas darbi" || normalized === "ārpus skolas darbi") {
+        currentFilter = normalized;
+        renderAll();
+        return;
+    }
+
+    // nepareizs ievads → neko nemaina
+    alert("Nepareizs filtrs!");
 };
+
+// ================= RESET =================
+window.resetFilter = function () {
+    currentFilter = null;
+    renderAll();
+};}

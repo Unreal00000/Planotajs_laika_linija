@@ -39,13 +39,13 @@ app.get("/events", (req, res) => {
 app.post("/add-event", (req, res) => {
     const { title, date, description, tag } = req.body;
 
-    if (!title || !date) {
-        return res.status(400).json({ error: "Missing data" });
+    if (!title) {
+        return res.status(400).json({ error: "Missing title" });
     }
 
     db.run(
         "INSERT INTO events (title, date, description, tag) VALUES (?, ?, ?, ?)",
-        [title, date, description || "", tag || "Skolas darbi"],
+        [title, date || null, description || "", tag || "Skolas darbi"],
         function(err) {
             if (err) return res.status(500).json({ error: "DB error" });
 
@@ -59,7 +59,6 @@ app.post("/add-event", (req, res) => {
 // DELETE
 app.post("/delete-event", (req, res) => {
     const { id } = req.body;
-
     if (!id) return res.status(400).json({ error: "No ID provided" });
 
     db.run("DELETE FROM events WHERE id = ?", [id], function(err) {
@@ -74,22 +73,32 @@ app.post("/delete-event", (req, res) => {
 // EDIT
 app.post("/edit-event", (req, res) => {
     const { id, title, date, description, tag } = req.body;
+    if (!id) return res.status(400).json({ error: "Nav ID" });
 
-    if (!id) return res.status(400).json({ error: "No ID" });
+    db.get("SELECT * FROM events WHERE id = ?", [id], (err, row) => {
+        if (err) return res.status(500).json({ error: "DB error" });
+        if (!row) return res.status(404).json({ error: "Not found" });
 
-    db.run(
-        `UPDATE events 
-         SET title = ?, date = ?, description = ?, tag = ?
-         WHERE id = ?`,
-        [title, date, description, tag, id],
-        function(err) {
-            if (err) return res.status(500).json({ error: "DB error" });
+        const newTitle = title !== undefined && title !== "" ? title : row.title;
+        const newDate = (date !== undefined && date !== "") ? date : row.date;
+        const newDesc = description !== undefined ? description : row.description;
+        const newTag = tag !== undefined && tag !== "" ? tag : row.tag;
 
-            db.all("SELECT * FROM events ORDER BY id ASC", (err, rows) => {
-                res.json({ events: rows });
-            });
-        }
-    );
+        db.run(
+            `UPDATE events 
+             SET title = ?, date = ?, description = ?, tag = ?
+             WHERE id = ?`,
+            [newTitle, newDate, newDesc, newTag, id],
+            function(err) {
+                if (err) return res.status(500).json({ error: "DB error" });
+
+                db.all("SELECT * FROM events ORDER BY id ASC", (err, rows) => {
+                    if (err) return res.status(500).json({ error: "DB error" });
+                    res.json({ events: rows });
+                });
+            }
+        );
+    });
 });
 
 app.listen(PORT, () => {
