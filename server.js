@@ -5,118 +5,102 @@ const sqlite3 = require("sqlite3").verbose();
 const app = express();
 const PORT = 3000;
 
-// Izveido vai atver datubāzi
 const basePath = process.pkg ? path.dirname(process.execPath) : __dirname;
 const db = new sqlite3.Database(path.join(basePath, "events.db"));
 
 app.use(express.json());
-
-
 app.use(express.static(basePath));
 
-
-// Izveido tabulu, ja vēl nav
+// DB
 db.run(`
     CREATE TABLE IF NOT EXISTS events (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        text TEXT
+        title TEXT,
+        date INTEGER,
+        description TEXT,
+        tag TEXT
     )
 `);
 
-// Servē HTML
+// ROOT
 app.get("/", (req, res) => {
     res.sendFile(path.join(basePath, "code.html"));
 });
-app.post("/signal", (req, res) => {
-    const message = req.body.message;
 
-    console.log("Received from client:", message);
-
-    // piemērs – pārveido tekstu
-    const modifiedMessage = message.toUpperCase();
-
-    res.json({ modifiedMessage });
-});
-
-// Pievienot jaunu notikumu
-app.post("/add-event", (req, res) => {
-    const text = req.body.text;
-    if (!text) return res.status(400).json({ error: "Empty text" });
-
-
-    db.run("INSERT INTO events (text) VALUES (?)", [text], function(err) {
-            if (err) return res.status(500).json({ error: "DB error" });
-
-            db.all("SELECT text FROM events ORDER BY id ASC", (err, rows) => {
-                        if (err) return res.status(500).json({ error: "DB error" });
-                        res.json({ events: rows.map(r => r.text) });
-                    });
-            });
-});
-
-
-app.post("/delete-event", (req, res) => {
-    const index = req.body.index; // kurš notikums dzēst
-    if (index == null) return res.status(400).json({ error: "No index provided" });
-
-    // Iegūst id pēc secības
-    db.all("SELECT id FROM events ORDER BY id ASC", (err, rows) => {
+// GET EVENTS
+app.get("/events", (req, res) => {
+    db.all("SELECT * FROM events ORDER BY id ASC", (err, rows) => {
         if (err) return res.status(500).json({ error: "DB error" });
-        if (index < 0 || index >= rows.length) return res.status(400).json({ error: "Index out of range" });
+        res.json({ events: rows });
+    });
+});
 
-        const idToDelete = rows[index].id;
-        db.run("DELETE FROM events WHERE id = ?", [idToDelete], function(err) {
+// ADD
+app.post("/add-event", (req, res) => {
+    const { title, date, description, tag } = req.body;
+
+    if (!title) {
+        return res.status(400).json({ error: "Missing title" });
+    }
+
+    db.run(
+        "INSERT INTO events (title, date, description, tag) VALUES (?, ?, ?, ?)",
+        [title, date || null, description || "", tag || "Skolas darbi"],
+        function(err) {
             if (err) return res.status(500).json({ error: "DB error" });
 
-            // Atgriež visus notikumus pēc dzēšanas
-            db.all("SELECT text FROM events ORDER BY id ASC", (err, rows) => {
-                    if (err) return res.status(500).json({ error: "DB error" });
-                    const formatted = rows.map(r => ({ ...r, tag: JSON.parse(r.tag) }));
-                    res.json({ events: formatted });
-                });
+            db.all("SELECT * FROM events ORDER BY id ASC", (err, rows) => {
+                res.json({ events: rows });
             });
-        });
-    });
-
-// Atgriezt visus notikumus
-    app.get("/events", (req, res) => {
-        db.all("SELECT text FROM events ORDER BY id ASC", (err, rows) => {
-            if (err) return res.status(500).json({ error: "DB error" });
-            res.json({ events: rows.map(r => r.text) });
-        });
-    });
-
-    app.post("/edit-event", (req, res) => {
-        const { index, newText } = req.body;
-
-        if (index == null || !newText) {
-            return res.status(400).json({ error: "Invalid data" });
         }
+    );
+});
 
-        // Dabū visus ID pareizā secībā
-        db.all("SELECT id FROM events ORDER BY id ASC", (err, rows) => {
-            if (err) return res.status(500).json({ error: "DB error" });
+// DELETE
+app.post("/delete-event", (req, res) => {
+    const { id } = req.body;
+    if (!id) return res.status(400).json({ error: "No ID provided" });
 
-            if (index < 0 || index >= rows.length) {
-                return res.status(400).json({ error: "Index out of range" });
-            }
+    db.run("DELETE FROM events WHERE id = ?", [id], function(err) {
+        if (err) return res.status(500).json({ error: "DB error" });
 
-            const idToUpdate = rows[index].id;
-
-            // UPDATE
-            db.run("UPDATE events SET text = ? WHERE id = ?", [newText, idToUpdate], function(err) {
-                    if (err) return res.status(500).json({ error: "DB error" });
-
-                    // Atgriež visus notikumus
-                    db.all("SELECT text FROM events ORDER BY id ASC", (err, rows) => {
-
-                                res.json({ events: rows.map(r => r.text) });
-                            });
-                    });
+        db.all("SELECT * FROM events ORDER BY id ASC", (err, rows) => {
+            res.json({ events: rows });
         });
     });
+});
 
-    app.listen(PORT, () => {
-        console.log(`Server running at http://localhost:${PORT}`);
-        console.log(`Atver pārlūkprogrammu un ej uz http://localhost:${PORT}`);
-    })
+// EDIT
+app.post("/edit-event", (req, res) => {
+    const { id, title, date, description, tag } = req.body;
+    if (!id) return res.status(400).json({ error: "Nav ID" });
+
+    db.get("SELECT * FROM events WHERE id = ?", [id], (err, row) => {
+        if (err) return res.status(500).json({ error: "DB error" });
+        if (!row) return res.status(404).json({ error: "Not found" });
+
+        const newTitle = title !== undefined && title !== "" ? title : row.title;
+        const newDate = (date !== undefined && date !== "") ? date : row.date;
+        const newDesc = description !== undefined ? description : row.description;
+        const newTag = tag !== undefined && tag !== "" ? tag : row.tag;
+
+        db.run(
+            `UPDATE events 
+             SET title = ?, date = ?, description = ?, tag = ?
+             WHERE id = ?`,
+            [newTitle, newDate, newDesc, newTag, id],
+            function(err) {
+                if (err) return res.status(500).json({ error: "DB error" });
+
+                db.all("SELECT * FROM events ORDER BY id ASC", (err, rows) => {
+                    if (err) return res.status(500).json({ error: "DB error" });
+                    res.json({ events: rows });
+                });
+            }
+        );
+    });
+});
+
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
+});

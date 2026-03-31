@@ -1,408 +1,264 @@
-// demonstrācijas dati jeb kā dati tiks sakārtoti
-// "name" un "description" izsaka kā simbolu virkni (string)
-// datumam "date" izmanto Unix Time Stamp un gadījumā, ja tas netiek ievadīts, lieto null
-// apzīmētājam "tag" izmanto simbolu virkņu masīvu
-const demoData = [
-    {"name":"KD programmēšanā","date":1773798400,"tag":["Kontroldarbs"],"description":"Jāpabeidz projekts ar gatavām testējamām funkcijām!"},
-    {"name":"KD matemātikā","date":1773898400,"tag":["Kontroldarbs", "Mājas darbs", "Skola"],"description":"Atvasināšana, funkcijas ekstrēmu noteikšana. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. "},
-    {"name":"Literatūra, pērļu zvejnieks","date":null,"tag":["Mājas darbs"],"description":"Pabeigt lasīt 'Pērļu zvejnieku'"},
-    {"name":"Pica!","date":1774017582,"tag":[],"description":"Picas ballīte piektdienā!"},
-    {"name":"ZPD aizstāvēšana","date":1773352800,"tag":["Skola"],"description":""},
-    {"name":"Kamermūzikas vakars","date":null,"tag":["Mājas darbs","Skola"],"description":"Gatavoties kamermūzikas vakaram."},
-]
-// saglabāti apzīmētāji un tiem atbilstošās krāsas
-const demoColors = {
-    "No tag":"rgb(0, 0, 0)", // "No tag" nav pievienojams vai nodzēšams, bet tā krāsa ir rediģējama
-    "Kontroldarbs":"rgb(255,0,0)",
-    "Mājas darbs":"rgb(0,166,255)",
-    "Skola":"rgb(102,0,255)",
+// ================= GLOBAL =================
+let data = [];
+let currentFilter = null;
+
+const timelineContainer = document.getElementById("timelineContainer");
+const relevantContainer = document.getElementById("relevantContainer");
+const todayContainer = document.getElementById("todayContainer");
+
+const todayUnixStart = Math.floor(new Date().setHours(0,0,0,0)/1000);
+const todayUnixEnd = todayUnixStart + 86400;
+
+// TAG KRĀSAS
+const tagColors = {
+    "skolas darbi": "purple",
+    "ārpus skolas darbi": "green",
+    "no tag": "black"
+};
+
+// ================= LOAD =================
+document.addEventListener("DOMContentLoaded", async function () {
+    await refreshFromServer();
+});
+
+// ================= REFRESH =================
+window.refreshFromServer = async function () {
+    const res = await fetch("/events");
+    const dataRes = await res.json();
+
+    data = dataRes.events.map(e => ({
+        id: e.id,
+        name: e.title,
+        date: e.date,
+        description: e.description,
+        tag: [normalizeTag(e.tag)]
+    }));
+
+    renderAll();
+};
+
+// ================= UTILS =================
+function normalizeTag(tag) {
+    if (!tag) return "no tag";
+    return tag.trim().toLowerCase();
 }
 
-var data = demoData
-var tagColors = demoColors
-
-// dati laika līnijai un aktuālajiem notikumiem bez datuma
-var data_TR = seperateAndSortData(data)
-const data_T = data_TR[0]
-const data_R = data_TR[1]
-
-// laiks tiek ielādēts tikai 1 reizi, kad programma sāk darboties
-const daysPast = 365
-const daysFuture = 365
-const today = new Date()
-today.setHours(0, 0, 0, 0)
-const todayUnix = Math.floor(today.getTime() / 1000)
-const calendarDays =  generateDays(daysPast, daysFuture) //katra kalendāra diena 2 gadu intervālā
-
-// šodienas notikumi un tiem atbilstošie ielādētie laika līnijas objekti
-var todayTask = []
-var todayTaskBox = []
-
-var firstTime_T = true
-var firstTime_R = true
-
-// sadala ievadītos notikumu datus starp laika līniju un aktuālajiem notikumiem
-function seperateAndSortData(data) {
-    var data_t = data.filter(item => item.date)
-    var data_r = data.filter(item => !item.date)
-
-    data_t.sort((a, b) => a.date - b.date)
-
-    return [data_t, data_r]
+function passesFilter(item) {
+    if (!currentFilter) return true;
+    return item.tag.includes(currentFilter);
 }
 
-// izgatavo dienu masīvu calendarDays konstantei
-function generateDays(daysPast, daysFuture) {
-    const result = []
-
-    for (let i = -daysPast; i <= daysFuture; i++) {
-        const d = new Date(today)
-        d.setDate(today.getDate() + i)
-        result.push(Math.floor(d.getTime() / 1000))
-    }
-
-    return result
+// ================= RENDER =================
+function renderAll() {
+    renderTimeline();
+    renderRelevant();
+    renderToday();
 }
 
-// pārvērš vertikālo kustību horizontālā kustībā
-function transformScroll(event) {
-    if (!event.deltaY) {
-        return
-    }
+// ================= TIMELINE =================
+function renderTimeline() {
+    timelineContainer.innerHTML = "";
 
-    event.currentTarget.scrollLeft += event.deltaY + event.deltaX
-    event.preventDefault()
+    data
+        .filter(e => e.date !== null && e.date !== undefined)
+        .filter(passesFilter)
+        .sort((a, b) => a.date - b.date)
+        .forEach(item => {
+
+            let el = document.createElement("div");
+
+            let className = "timelineElement";
+
+            if (item.date < todayUnixStart) className = "timelineElement_past";
+            else if (item.date >= todayUnixStart && item.date < todayUnixEnd) className = "timelineElement_today";
+
+            el.className = className;
+            el.textContent = item.name;
+
+            let dateDiv = document.createElement("div");
+            dateDiv.className = "timelineElement_date";
+            dateDiv.textContent = new Date(item.date * 1000).toLocaleDateString();
+            el.appendChild(dateDiv);
+
+            addTagColor(item, el);
+            timelineContainer.appendChild(el);
+        });
 }
 
-// nodrošina, ka viss tiek ielādēts atverot tīmekļa vietni
-document.addEventListener("DOMContentLoaded", function () {
-    loadTimeline(data_T, calendarDays)
-    loadRelevant(data_R)
-    loadToday()
-})
+// ================= RELEVANT =================
+function renderRelevant() {
+    relevantContainer.innerHTML = "";
 
-// ielādē laika līniju
-function loadTimeline(tasks, calendarDays, filterType, filterDirection, filterTags) {
-    let days = [...calendarDays]
+    data
+        .filter(e => e.date === null || e.date === undefined)
+        .filter(passesFilter)
+        .forEach(item => {
 
-    if (firstTime_T) {
-        timelineContainer.addEventListener('wheel', transformScroll)
-        firstTime_T = false
-    } else {
-        // atbrīvojas no iepriekš ielādētiem datiem un informācijas
-        todayTaskBox = []
-        while (timelineContainer.hasChildNodes()) {
-            timelineContainer.removeChild(timelineContainer.firstChild)
-            console.log(1)
-        }
-    }
+            let el = document.createElement("div");
+            el.className = "relevantElement";
+            el.textContent = item.name;
 
-    var greenLight = true
-
-    if (filterType === "tasks") {
-        // tiek ielādēti tikai notikumi
-        days = tasks
-    } else {
-        tasks.forEach(item => {
-            // pārbauda, vai vismaz 1 apzīmētājs notikumā sakrīt ar filtru
-            if (filterTags) {
-                greenLight = false
-                item.tag.forEach(function (tag) {
-                    if (filterTags.includes(tag)) {
-                        greenLight = true
-                    }
-                })
-            }
-
-            if (greenLight) {
-                // ievieto notikumus dienās
-                var index = days.findIndex(day => (day <= item.date && (day + 86400) > item.date))
-
-                if (index !== -1) {
-                    days[index] = item
-                } else {
-                    index = days.findIndex(day => (day.date <= item.date && (day.date + 86400) > item.date))
-                    if (index !== -1) {
-                        days.splice(index + 1, 0, item)
-                    }
-                }
-            }
-        })
-    }
-    greenLight = true
-
-    if (filterDirection === "reverse") {
-        // apvērš dienu secību
-        days = days.reverse()
-    }
-    // uztaisa objektus
-    days.forEach(function (item) {
-        TLE = document.createElement("button")
-        TLE.setAttribute("class", "timelineElement")
-        var itemType
-        var position
-
-        // izšķir objektus pa notikumiem un parastajām dienām, maina dažus dizaina elementus, ja nepieciešams
-        if (typeof item === "object") {
-            let d = new Date(item.date * 1000)
-            let text = d.toString().slice(0, 15)
-
-            TLE_D = document.createElement("div")
-            TLE_D.textContent = text
-            TLE_D.setAttribute("class", "timelineElement_date")
-
-            TLE.textContent = item.name
-            TLE.style.width = "20%"
-            TLE.appendChild(TLE_D)
-            itemType = "task"
-        } else if (typeof item === "number") {
-            let d = new Date(item * 1000)
-            let text = d.toString().slice(0, 15)
-
-            TLE.textContent = text
-            TLE.style.fontWeight = "normal"
-            TLE.style.fontSize = "16px"
-            itemType = "day"
-        }
-
-        // nosaka vai objekts atrodas pagātnē vai tagadnē
-        if (itemType === "task") {
-            addTagColor(item, TLE)
-            if (item.date < todayUnix) {
-                position = "past"
-            } else if (todayUnix <= item.date && (todayUnix + 86400) > item.date) {
-                position = "today"
-                todayTask.push(item)
-            }
-        } else if (itemType === "day") {
-            if (item < todayUnix) {
-                position = "past"
-            } else if (item === todayUnix) {
-                position = "today"
-            }
-        }
-        // atbilstoši maina dizainu
-        if (position === "past") {
-            TLE.setAttribute("class", "timelineElement_past")
-        } else if (position === "today") {
-            TLE.setAttribute("class", "timelineElement_today")
-            let tempVar = TLE
-            todayTaskBox.push(tempVar)
-            requestAnimationFrame(() => {
-                timelineContainer.scrollLeft = todayTaskBox[0].offsetLeft - timelineContainer.clientWidth / 4 + todayTaskBox[0].clientWidth / 2
-            })
-        }
-        // pievieno objektus tilpnei
-        document.getElementById("timelineContainer").appendChild(TLE)
-    })
+            addTagColor(item, el);
+            relevantContainer.appendChild(el);
+        });
 }
 
-// ielādē aktuālos notikumus
-function loadRelevant(tasks, filterTags) {
-    if (firstTime_R) {
-        relevantContainer.addEventListener('wheel', transformScroll)
-        firstTime_R = false
-    } else {
-        // atbrīvojas no iepriekš ielādētiem datiem un informācijas
-        while (relevantContainer.hasChildNodes()) {
-            relevantContainer.removeChild(relevantContainer.firstChild)
-        }
+// ================= TODAY =================
+function renderToday() {
+    todayContainer.innerHTML = "";
+
+    let todayEvents = data
+        .filter(e => e.date !== null && e.date !== undefined)
+        .filter(e => e.date >= todayUnixStart && e.date < todayUnixEnd)
+        .filter(passesFilter);
+
+    if (todayEvents.length === 0) {
+        todayContainer.innerHTML = "<h2>Šodien nav notikumu</h2>";
+        return;
     }
 
-    var greenLight = true
+    todayEvents.forEach(item => {
+        let div = document.createElement("div");
 
-    tasks.forEach(function (item) {
-        // pārbauda, vai vismaz 1 apzīmētājs notikumā sakrīt ar filtru
-        if (filterTags) {
-            greenLight = false
-            item.tag.forEach(function (tag) {
-                if (filterTags.includes(tag)) {
-                    greenLight = true
-                }
-            })
-        }
-        if (greenLight) {
-            // uztaisa un pievieno objektus tilpnei
-            RE = document.createElement("button")
-            RE.textContent = item.name
-            RE.setAttribute("class", "relevantElement")
-            addTagColor(item, RE)
-            document.getElementById("relevantContainer").appendChild(RE)
-        }
-        greenLight = true
-    })
+        div.innerHTML = `
+            <h2>${item.name}</h2>
+            <p>${item.description || ""}</p>
+            <small>${new Date(item.date * 1000).toLocaleDateString()}</small>
+        `;
+
+        todayContainer.appendChild(div);
+    });
 }
 
-// ielādē šodienas notikumu papildinformāciju
-function loadToday() {
-    // atbrīvojas no iepriekš ielādētiem datiem un informācijas
-    while (todayContainer.hasChildNodes()) {
-        todayContainer.removeChild(todayContainer.firstChild)
-    }
-    // pievieno tukšu objektu, kā daudzfunkcionālu atkāpi
-    function addBlank () {
-        TDE_blank = document.createElement("div")
-        TDE_blank.setAttribute("class", "todayElement_blank")
-        document.getElementById("todayContainer").appendChild(TDE_blank)
-    }
-    addBlank()
-    // pievieno notikuma nosaukuma virsrakstu
-    function addHeader (text, tags) {
-        TDE_H = document.createElement("div")
-        TDE_H.setAttribute("class", "todayElement_headerContainer")
-        // pievieno apzīmētājiem atbilstošās krāsu dekorācijas. True = secīgi, false = apgrieztā secībā
-        function addDecor (boolVal) {
-            D1 = document.createElement("div")
-            D1.setAttribute("class", "todayDecoration_1")
+// ================= TAG =================
+function addTagColor(item, element) {
+    let tagDiv = document.createElement("div");
+    tagDiv.className = "tagContainer";
 
-            var usedTags = []
-            var tagsArray = []
-            if (boolVal) {
-                tagsArray = tags
-            } else {
-                tagsArray = tags.reverse()
-            }
+    item.tag.forEach(tag => {
+        let t = document.createElement("div");
+        t.className = "tagElement";
+        t.style.backgroundColor = tagColors[tag] || tagColors["no tag"];
+        tagDiv.appendChild(t);
+    });
 
-            if (tagsArray.length > 0) {
-                tagsArray.forEach(function (tag) {
-                    // pārbauda vai lieki neatkārtojas apzīmētāji
-                    if (usedTags.includes(tag)) {
-                        // brīdināšana jau tiek veikta addTagColor() funkcijā
-                        return
-                    }
-
-                    TE = document.createElement("div")
-                    TE.setAttribute("class", "tagElement")
-
-                    // pārbauda vai apzīmētājam ir atbilstoša krāsa
-                    if (tagColors[tag]) {
-                        TE.style.backgroundColor = tagColors[tag]
-                        D1.appendChild(TE)
-                    } else {
-                        // brīdināšana jau tiek veikta addTagColor() funkcijā
-                        TE.remove()
-                    }
-
-                    usedTags.push(tag)
-                })
-            } else {
-                if (tagColors["No tag"]) {
-                    D1.style.backgroundColor = tagColors["No tag"]
-                } else {
-                    D1.style.backgroundColor = "rgb(0, 0, 0)"
-                }
-            }
-
-            TDE_H.appendChild(D1)
-        }
-
-        // objekti virsrakstā
-        addDecor(true)
-        TDE_HC = document.createElement("div")
-        TDE_HC.textContent = text
-        TDE_HC.setAttribute("class", "todayElement_header")
-        TDE_H.appendChild(TDE_HC)
-        addDecor(false)
-
-        document.getElementById("todayContainer").appendChild(TDE_H)
-    }
-    // šeit notiek pati ielādēšanas daļa šodienas notikumiem
-    if (todayTask.length > 0) {
-        todayTask.forEach(function (item) {
-            addHeader(item.name, item.tag)
-
-            if (item.description && item.description.length > 0) {
-                TDE_T = document.createElement("div")
-                TDE_T.textContent = item.description
-                TDE_T.setAttribute("class", "todayElement_text")
-                document.getElementById("todayContainer").appendChild(TDE_T)
-            }
-            addBlank()
-        })
-    } else {
-        addHeader("Šodien notikumu nav!", [])
-    }
-
-    todayTask = []
+    element.appendChild(tagDiv);
 }
 
-// pievieno apzīmētājiem atbilstošas krāsas notikumu objektiem
-function addTagColor (item, element) {
-    TC = document.createElement("div")
-    TC.setAttribute("class", "tagContainer")
-    element.appendChild(TC)
+// ================= ADD =================
+window.addEvent = async function () {
+    const name = prompt("Nosaukums:");
+    if (!name) return;
 
-    var usedTags = []
+    const dateInput = prompt("Datums (YYYY-MM-DD, tukšs = nav):");
+    const description = prompt("Apraksts:");
+    const tag = prompt("Tags (Skolas darbi / Ārpus skolas darbi):");
 
-    if (item.tag.length > 0) {
-        item.tag.forEach(function (tag) {
-            // pārbauda vai lieki neatkārtojas apzīmētāji
-            if (usedTags.includes(tag)) {
-                console.warn("Repeat tag -> " + tag)
-                return
-            }
+    let date = null;
+    if (dateInput) date = Math.floor(new Date(dateInput).getTime() / 1000);
 
-            TE = document.createElement("div")
-            TE.setAttribute("class", "tagElement")
+    await fetch("/add-event", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ title: name, date, description, tag })
+    });
 
-            // pārbauda vai apzīmētājam ir atbilstoša krāsa
-            if (tagColors[tag]) {
-                TE.style.backgroundColor = tagColors[tag]
-                TC.appendChild(TE)
-            } else {
-                console.warn("no tag color for tag -> " + tag)
-                TE.remove()
-            }
+    refreshFromServer();
+};
 
-            usedTags.push(tag)
-        })
-    } else {
-        if (tagColors["No tag"]) {
-            TC.style.backgroundColor = tagColors["No tag"]
-        } else {
-            TC.style.backgroundColor = "rgb(0, 0, 0)"
-        }
-    }
-}
+// ================= DELETE =================
+window.deleteEvent = async function () {
+    let msg = "ID:\n";
+    data.forEach(e => msg += `${e.id}: ${e.name}\n`);
 
-// filtrē notikumus. Methods: "" vai "tasks", directions: "" vai "reverse", tags: ["Apzīmētājs 1", "Apzīmētājs 2" utt.]
-function filterTimeline (method, direction, tags) {
-    if (direction !== "reverse") {
-        direction = "normal"
-    }
+    const id = prompt(msg);
+    if (!id) return;
 
-    if (!method || method === "" || method === "default") {
-        method = "default"
-    }
-    // apakšfunkcija, lai samazinātu koda garumu, ielādē par jaunu notikumus
-    function filterTimeline_2 () {
-        loadTimeline(data_T, calendarDays, method, direction)
-        loadRelevant(data_R)
-        loadToday()
-    }
-    // pārbaude atlasītajiem apzīmētāju filtriem
-    if (tags && tags.length > 0) {
-        var validTags = []
-        tags.forEach(function (tag) {
-            if (tagColors[tag]) {
-                validTags.push(tag)
-            }
-        })
-        if (validTags.length > 0) {
-            loadTimeline(data_T, calendarDays, method, direction, validTags)
-            loadRelevant(data_R, validTags)
-            loadToday()
-        } else {
-            filterTimeline_2()
-        }
-    } else {
-        filterTimeline_2()
+    await fetch("/delete-event", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ id: parseInt(id) })
+    });
+
+    refreshFromServer();
+};
+
+// ================= EDIT (LATVISKI) =================
+window.editEvent = async function () {
+    let msg = "ID:\n";
+    data.forEach(e => msg += `${e.id}: ${e.name}\n`);
+
+    const id = prompt(msg);
+    if (!id) return;
+
+    const field = prompt("Ko vēlies rediģēt? (nosaukums / datums / apraksts / tags)");
+    if (!field) return;
+
+    let body = { id: parseInt(id) };
+
+    if (field === "nosaukums") {
+        const val = prompt("Jauns nosaukums:");
+        if (val) body.title = val;
     }
 
-}
+    if (field === "datums") {
+        const val = prompt("Jauns datums (YYYY-MM-DD) vai ieraksti DELETE lai dzēstu:");
+        if (val === "DELETE") body.date = null;
+        else if (val) body.date = Math.floor(new Date(val).getTime() / 1000);
+    }
 
-// palaist filtrēšanas funkciju 3 sekundes pēc lapas ielādēšanas
-// setTimeout(() => {
-//     filterTimeline("default", "normal", ["Skola"])
-//     console.log("Executed after 3 seconds")
-// }, 3000)
+    if (field === "apraksts") {
+        const val = prompt("Jauns apraksts vai DELETE:");
+        if (val === "DELETE") body.description = "";
+        else if (val) body.description = val;
+    }
+
+    if (field === "tags") {
+        const val = prompt("Jauns tags:");
+        if (val) body.tag = val;
+    }
+
+    await fetch("/edit-event", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(body)
+    });
+
+    refreshFromServer();
+
+// ================= FILTER (FIXED) =================
+window.filterTag = function () {
+    const input = prompt(
+        "Filtrs:\n- Skolas darbi\n- Ārpus skolas darbi\n- Rādīt visus"
+    );
+
+    if (!input) {
+        // tukšs → noņem filtru
+        currentFilter = null;
+        renderAll();
+        return;
+    }
+
+    const normalized = normalizeTag(input);
+
+    if (normalized === "rādīt visus") {
+        currentFilter = null;
+        renderAll();
+        return;
+    }
+
+    if (normalized === "skolas darbi" || normalized === "ārpus skolas darbi") {
+        currentFilter = normalized;
+        renderAll();
+        return;
+    }
+
+    // nepareizs ievads → neko nemaina
+    alert("Nepareizs filtrs!");
+};
+
+// ================= RESET =================
+window.resetFilter = function () {
+    currentFilter = null;
+    renderAll();
+};}

@@ -40,3 +40,14 @@ body {font-family: "Ubuntu", sans-serif;}
 .filterElement:active {background-color: rgb(255, 255, 255)}
 
 ::-webkit-scrollbar {display: none}
+
+/* Today fallback */
+.todayContainer h2 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Mazāki teksti timeline */
+.timelineElement {
+    padding: 5px;
+}
