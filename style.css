@@ -1,28 +1,36 @@
 @charset "UTF-8";
 /* Body */
-body {font-family: "Ubuntu", sans-serif;}
+body {
+    font-family: "Ubuntu", sans-serif;
+    background-image: linear-gradient(to bottom, #ffb34b, #ffffff);
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Title */
+.titleBox {display: block; height: 10%; width: 20%; position: absolute; left: 40%; top: 3%; font-weight:bold; font-size: 80px; text-align:center}
 
 /* TimeLine */
-.timelineContainer {display:flex; container-type:scroll-state; white-space:nowrap; overflow-y:hidden; overflow-x:auto; border:3px dotted black; height:40%; width:50%; position:absolute; top:8%; left:10%; border-radius:20px}
-.timelineElement {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:98%; width:8%; background-color: rgb(0, 235, 255); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%; font-size: 20px; font-weight: bold; text-wrap: wrap}
+.timelineContainer {display:flex; container-type:scroll-state; white-space:nowrap; overflow-y:hidden; overflow-x:auto; background-color: rgb(255, 255, 255); height:35%; width:50%; position:absolute; top:16%; left:10%; border-radius:20px}
+.timelineElement {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:98%; width:8%; background-color: rgb(0, 235, 255); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%; font-size: 20px; font-weight: bold; text-wrap: wrap; cursor:pointer;}
 .timelineElement:hover {background-color: rgb(142, 255, 235)}
 .timelineElement:active {background-color: rgb(255, 255, 255)}
-.timelineElement_past {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:98%; width:8%; background-color: rgb(128, 128, 128); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%; font-size: 20px; font-weight: bold; text-wrap: wrap}
+.timelineElement_past {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:98%; width:8%; background-color: rgb(128, 128, 128); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%; font-size: 20px; font-weight: bold; text-wrap: wrap; cursor:pointer;}
 .timelineElement_past:hover {background-color: rgb(175, 175, 175)}
 .timelineElement_past:active {background-color: rgb(255, 255, 255)}
-.timelineElement_today {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:98%; width:8%; background-color: rgb(255, 208, 0); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%; font-size: 20px; font-weight: bold; text-wrap: wrap}
+.timelineElement_today {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:98%; width:8%; background-color: rgb(255, 208, 0); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%; font-size: 20px; font-weight: bold; text-wrap: wrap; cursor:pointer;}
 .timelineElement_today:hover {background-color: rgb(255, 232, 135)}
 .timelineElement_today:active {background-color: rgb(255, 255, 255)}
 .timelineElement_date {display: block; height: 10%; width: 100%; position: absolute; left: 0%; bottom: 0%; font-size: 16px}
 
 /* Relevant */
-.relevantContainer {display:flex; container-type:scroll-state; white-space:nowrap; overflow-y:hidden; overflow-x:auto; border:3px solid black; height:40%; width:80%; background-color: rgb(22, 158, 0); position:absolute; top:52%; left:10%; border-radius:20px}
-.relevantElement {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:98%; width:20%; background-color: rgb(55, 255, 0); position:relative; top:0%; left:0.2%; border-radius:20px; margin:0.2%; font-size: 20px; font-weight: bold; text-wrap: wrap}
+.relevantContainer {display:flex; container-type:scroll-state; white-space:nowrap; overflow-y:hidden; overflow-x:auto; background-color: rgb(255, 255, 255); height:35%; width:80%; position:absolute; top:55%; left:10%; border-radius:20px}
+.relevantElement {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:98%; width:20%; background-color: rgb(55, 255, 0); position:relative; top:0%; left:0.2%; border-radius:20px; margin:0.2%; font-size: 20px; font-weight: bold; text-wrap: wrap; cursor:pointer;}
 .relevantElement:hover {background-color: rgb(174, 255, 87)}
 .relevantElement:active {background-color: rgb(255, 255, 255)}
 
 /* Today */
-.todayContainer {display:block; container-type:scroll-state; overflow-y:auto; overflow-x:hidden; border:3px solid black; height:40%; width:28%; position:absolute; top:8%; left:62%; border-radius:20px}
+.todayContainer {display:block; container-type:scroll-state; overflow-y:auto; overflow-x:hidden; background-color: rgb(255, 255, 255); height:35%; width:28%; position:absolute; top:16%; left:62%; border-radius:20px}
 .todayElement_headerContainer {display:flex; flex-direction: row; align-items: stretch; gap: 1%; justify-content: space-between; align-items: center; overflow: hidden; height:auto; width:94%; position:relative; top:0%; left:0%; margin:auto;}
 .todayElement_header {display:inline-block; flex-grow: 1; height:auto; width: auto; max-width: 90%; position:relative; top:0%; left:0%; margin:auto; font-weight:bold; font-size:xx-large; text-align:center}
 .todayElement_text {display:inline-block; flex: 0 0 auto; height:auto; width:94%; position:relative; top:0%; left:3%; margin:auto; font-size:x-large; text-align:center}
@@ -34,9 +42,9 @@ body {font-family: "Ubuntu", sans-serif;}
 .tagElement {display:block; flex: 1; min-width: 0; height:100%; width:auto; position:relative; top:0%; left:0%}
 
 /* Filter */
-.filterContainer {display:block; border:3px dotted black; height:99.5%; width:5%; position:absolute; top:0%; left:0%}
-.filterElement {display: inline-block; border: 3px solid black; height:25%; width:100%; background-color: rgb(255, 90, 0); position:relative}
-.filterElement:hover {background-color: rgb(255, 135, 51);}
+.filterContainer {display:block; height:97.6%; width:5%; position:absolute; top:0.3%; left:0.1%}
+.filterElement {display: inline-block; height:25%; width:100%; margin:2px; background-color: rgb(152, 218, 255); border-color: transparent; position:relative; border-radius:20px; cursor:pointer;}
+.filterElement:hover {background-color: rgb(98, 198, 255);}
 .filterElement:active {background-color: rgb(255, 255, 255)}
 
 ::-webkit-scrollbar {display: none}
