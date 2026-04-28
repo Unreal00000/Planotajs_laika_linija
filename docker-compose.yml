@@ -1,15 +1,11 @@
 services:
-  db:
-    image: postgres:16
-    container_name: planner
-    environment:
-      POSTGRES_DB: planner
-      POSTGRES_USER: planner_user
-      POSTGRES_PASSWORD: planner_pass
+  app:
+    build:
+      context: .
+    container_name: planner_app
     ports:
-      - "5432:5432"
+      - "3000:3000"
     volumes:
-      - planner_pgdata:/var/lib/postgresql/data
-
-volumes:
-  planner_pgdata:
+      - .:/app
+      - /app/node_modules
+    command: npm start

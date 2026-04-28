@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="utf-8">
+  <title>Plānotājs</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ================= TAG SELECT ================= -->
+<select id="tagSelect">
+  <option value="skolas darbi">Skolas darbi</option>
+  <option value="ārpus skolas darbi">Ārpus skolas darbi</option>
+</select>
+
+<!-- ================= FILTER BUTTONS ================= -->
+<div class="filterContainer">
+  <button onclick="addEvent()">Pievienot</button>
+  <button onclick="filterTag()">Filtrs</button>
+  <button onclick="resetFilter()">Atiestatīt filtru</button>
+  <button onclick="createTag()">Izveidot tagu</button>
+</div>
+
+<!-- ================= LAYOUT CONTAINERS ================= -->
+<div class="timelineContainer" id="timelineContainer"></div>
+<div class="relevantContainer" id="relevantContainer"></div>
+<div class="todayContainer" id="todayContainer"></div>
+
+<!-- ================= JS (ONLY ONCE) ================= -->
+<script type="module" src="controller.js"></script>
+
+</body>
+</html>
