@@ -8,24 +8,21 @@
 
 <body>
 
-<!-- ================= TAG SELECT ================= -->
-<select id="tagSelect">
-  <option value="skolas darbi">Skolas darbi</option>
-  <option value="ārpus skolas darbi">Ārpus skolas darbi</option>
-</select>
 
 <!-- ================= FILTER BUTTONS ================= -->
 <div class="filterContainer">
-  <button onclick="addEvent()">Pievienot</button>
-  <button onclick="filterTag()">Filtrs</button>
-  <button onclick="resetFilter()">Atiestatīt filtru</button>
-  <button onclick="createTag()">Izveidot tagu</button>
+  <button class="filterElement" onclick="addEvent()">Pievienot</button>
+  <button class="filterElement" onclick="filterTag()">Filtrs</button>
+  <button class="filterElement" onclick="resetFilter()">Atiestatīt filtru</button>
+  <button class="filterElement" onclick="createTag()">Izveidot tagu</button>
 </div>
 
 <!-- ================= LAYOUT CONTAINERS ================= -->
 <div class="timelineContainer" id="timelineContainer"></div>
 <div class="relevantContainer" id="relevantContainer"></div>
 <div class="todayContainer" id="todayContainer"></div>
+
+<div class="titleBox" id="titleBox"> TaskFlow </div>
 
 <!-- ================= JS (ONLY ONCE) ================= -->
 <script type="module" src="controller.js"></script>
