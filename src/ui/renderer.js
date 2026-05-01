@@ -2,6 +2,58 @@ const timelineContainer = document.getElementById("timelineContainer");
 const relevantContainer = document.getElementById("relevantContainer");
 const todayContainer = document.getElementById("todayContainer");
 
+const daysPast = 365;
+const daysFuture = 365;
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+const todayUnix = Math.floor(today.getTime() / 1000);
+
+let firstTime_T = true
+let firstTime_R = true
+
+let todayTaskBox = []
+
+function generateDays(daysPast, daysFuture) {
+    const result = [];
+    for (let i = -daysPast; i <= daysFuture; i++) {
+        const d = new Date(today);
+        d.setDate(today.getDate() + i);
+        result.push(Math.floor(d.getTime() / 1000));
+    }
+    return result;
+}
+
+function getCalendarDays(data) {
+    let past = daysPast;
+    let future = daysFuture;
+
+    data.filter(item => item.date).forEach(item => {
+        const itemUnix = Math.floor(new Date(item.date).getTime() / 1000);
+        const diffDays = Math.ceil((itemUnix - todayUnix) / 86400);
+
+        if (diffDays < -past) past = Math.abs(diffDays);
+        if (diffDays > future) future = diffDays;
+    });
+
+    return generateDays(past, future);
+}
+
+function separateAndSortData(data) {
+    const data_t = data.filter(item => item.date);
+    const data_r = data.filter(item => !item.date);
+    data_t.sort((a, b) => a.date - b.date);
+    return [data_t, data_r];
+}
+
+function transformScroll(event) {
+    if (!event.deltaY) {
+        return
+    }
+
+    event.currentTarget.scrollLeft += event.deltaY + event.deltaX
+    event.preventDefault()
+}
+
 // ================= TAG COLORS (random per tag) =================
 const tagColorMap = {};
 
@@ -41,7 +93,7 @@ function getTodayBounds() {
 }
 
 function getStatusClass(date) {
-    if (!date) return "timelineElement";
+    if (!date) return "relevantElement";
 
     const { start, end } = getTodayBounds();
     const d = new Date(date).getTime();
@@ -109,19 +161,87 @@ export function renderAll(data, filter) {
 
 // ================= TIMELINE =================
 function renderTimeline(data, filter) {
-    timelineContainer.innerHTML = "";
+    if (firstTime_T) {
+        timelineContainer.addEventListener('wheel', transformScroll)
+        firstTime_T = false
+    }
 
-    data
-        .filter(e => e.date)
+    timelineContainer.innerHTML = "";
+    todayTaskBox = [];
+
+    const [data_t] = separateAndSortData(data);
+    let days = getCalendarDays(data_t);
+
+    data_t
         .filter(e => passesFilter(e, filter))
-        .sort((a, b) => new Date(a.date) - new Date(b.date))
         .forEach(item => {
-            timelineContainer.appendChild(createCard(item));
+            const itemUnix = Math.floor(new Date(item.date).getTime() / 1000); // convert here
+
+            const index = days.findIndex(day =>
+                typeof day === "number" &&
+                day <= itemUnix &&
+                (day + 86400) > itemUnix
+            );
+
+            if (index !== -1) {
+                days[index] = item;
+            } else {
+                const index2 = days.findIndex(day =>
+                    typeof day === "object" &&
+                    Math.floor(new Date(day.date).getTime() / 1000) <= itemUnix &&
+                    (Math.floor(new Date(day.date).getTime() / 1000) + 86400) > itemUnix
+                );
+                if (index2 !== -1) {
+                    days.splice(index2 + 1, 0, item);
+                }
+            }
         });
+
+    days.forEach(item => {
+        if (typeof item === "number") {
+            const marker = document.createElement("div");
+            marker.textContent = new Date(item * 1000).toString().slice(0, 15);
+            marker.style.fontWeight = "normal";
+            marker.style.fontSize = "16px";
+
+            if (item < todayUnix) marker.className = "timelineElement_past";
+            else if (item === todayUnix) marker.className = "timelineElement_today";
+            else marker.className = "timelineElement";
+
+            timelineContainer.appendChild(marker);
+        } else {
+            const card = createCard(item);
+
+            card.style.width = "20%"
+
+            const itemUnix = Math.floor(new Date(item.date).getTime() / 1000);
+            if (itemUnix >= todayUnix && itemUnix < todayUnix + 86400) {
+                todayTaskBox.push(card);
+            }
+
+            timelineContainer.appendChild(card);
+        }
+    });
+
+    if (todayTaskBox.length > 0) {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                timelineContainer.scrollLeft =
+                    todayTaskBox[0].offsetLeft -
+                    timelineContainer.clientWidth / 4 +
+                    todayTaskBox[0].clientWidth / 2;
+            });
+        });
+    }
 }
 
 // ================= RELEVANT =================
 function renderRelevant(data, filter) {
+    if (firstTime_R) {
+        relevantContainer.addEventListener('wheel', transformScroll)
+        firstTime_R = false
+    }
+
     relevantContainer.innerHTML = "";
 
     data

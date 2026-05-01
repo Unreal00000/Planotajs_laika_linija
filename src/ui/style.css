@@ -12,7 +12,7 @@ body {
 
 /* TimeLine */
 .timelineContainer {display:flex; container-type:scroll-state; white-space:nowrap; overflow-y:hidden; overflow-x:auto; background-color: rgb(255, 255, 255); height:35%; width:50%; position:absolute; top:16%; left:10%; border-radius:20px}
-.timelineElement {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:97%; width:8%; background-color: rgb(0, 235, 255); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%; font-size: 20px; font-weight: bold; text-wrap: wrap; cursor:pointer;}
+.timelineElement {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:94%; width:8%; background-color: rgb(0, 235, 255); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%; font-size: 20px; font-weight: bold; text-wrap: wrap; cursor:pointer;}
 .timelineElement:hover {background-color: rgb(142, 255, 235)}
 .timelineElement:active {background-color: rgb(255, 255, 255)}
 .timelineElement_past {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:97%; width:8%; background-color: rgb(128, 128, 128); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%; font-size: 20px; font-weight: bold; text-wrap: wrap; cursor:pointer;}
