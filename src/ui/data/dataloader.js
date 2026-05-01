@@ -9,8 +9,8 @@ export async function getEvents() {
         }
 
         const data = await res.json();
-
         return Array.isArray(data.events) ? data.events : [];
+
     } catch (err) {
         console.error("Network error (GET events):", err);
         return [];
@@ -30,6 +30,7 @@ export async function addEventAPI(body) {
             const text = await res.text();
             console.error("Add event failed:", res.status, text);
         }
+
     } catch (err) {
         console.error("Network error (ADD event):", err);
     }
@@ -48,25 +49,10 @@ export async function deleteEventAPI(id) {
             const text = await res.text();
             console.error("Delete event failed:", res.status, text);
         }
+
     } catch (err) {
         console.error("Network error (DELETE event):", err);
     }
-}
-
-export async function getTags() {
-    const res = await fetch("/api/events/tags");
-    const data = await res.json();
-    return data.tags;
-}
-
-export async function addTagAPI(name) {
-    await fetch("/api/events/tags/add", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ name })
-    });
 }
 
 // ================= EDIT EVENT =================
@@ -82,7 +68,37 @@ export async function editEventAPI(body) {
             const text = await res.text();
             console.error("Edit event failed:", res.status, text);
         }
+
     } catch (err) {
         console.error("Network error (EDIT event):", err);
+    }
+}
+
+// ================= TAGS (no pārinieka idejas, bet tīri API) =================
+
+// GET all tags
+export async function getTags() {
+    try {
+        const res = await fetch("/api/events/tags");
+        const data = await res.json();
+
+        return Array.isArray(data.tags) ? data.tags : [];
+
+    } catch (err) {
+        console.error("GET tags failed:", err);
+        return [];
+    }
+}
+
+// ADD tag
+export async function addTagAPI(name) {
+    try {
+        await fetch("/api/events/tags/add", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name })
+        });
+    } catch (err) {
+        console.error("ADD tag failed:", err);
     }
 }
