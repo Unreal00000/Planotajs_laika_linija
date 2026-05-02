@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="40409312-64fd-471a-9e58-a6b17d52e2e8" name="Changes" comment="Atguvu daļu no vecās funkcionalitātes">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/events.db" beforeDir="false" afterPath="$PROJECT_DIR$/events.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/code.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/code.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/renderer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/renderer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/style.css" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Roberts" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Unreal00000&quot;
+  }
+}</component>
+  <component name="GitHubPullRequestState">{
+  &quot;prStates&quot;: [
+    {
+      &quot;id&quot;: {
+        &quot;id&quot;: &quot;PR_kwDOQckj_M7EiXFJ&quot;,
+        &quot;number&quot;: 21
+      },
+      &quot;lastSeen&quot;: 1771397821530
+    }
+  ]
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Unreal00000/Planotajs_laika_linija.git&quot;,
+    &quot;accountId&quot;: &quot;24cd0c86-47bf-4478-b88f-3804f769c927&quot;
+  },
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
+    },
+    &quot;owner&quot;: &quot;Unreal00000&quot;,
+    &quot;repository&quot;: &quot;Planotajs_laika_linija&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="399TQ91GthBpjwo16dvQdoMnB5P" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Batch.run_docker.executor": "Run",
+    "Docker.Dockerfile.executor": "Run",
+    "JavaScript Debug.code.html (1).executor": "Run",
+    "JavaScript Debug.code.html.executor": "Run",
+    "Node.js.dataloader.js.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "Roberts__WebStorm",
+    "javascript.preferred.runtime.type.id": "node",
+    "junie.onboarding.icon.badge.shown": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2025.3.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="Batch.run_docker">
+    <configuration name="run_docker" type="BatchConfigurationType" factoryName="Batch" temporary="true">
+      <module name="Planotajs_laika_linija" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="run_docker.bat" />
+      <option name="PARAMETERS" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="code.html (1)" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Planotajs_laika_linija/src/ui/code.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="code.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Planotajs_laika_linija/code.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="dataloader.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/dataloader.js" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+    <configuration name="Dockerfile" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="containerName" value="" />
+          <option name="sourceFilePath" value="Dockerfile" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Batch.run_docker" />
+      <item itemvalue="Docker.Dockerfile" />
+      <item itemvalue="JavaScript Debug.code.html (1)" />
+      <item itemvalue="JavaScript Debug.code.html" />
+      <item itemvalue="Node.js.dataloader.js" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Batch.run_docker" />
+        <item itemvalue="JavaScript Debug.code.html (1)" />
+        <item itemvalue="JavaScript Debug.code.html" />
+        <item itemvalue="Docker.Dockerfile" />
+        <item itemvalue="Node.js.dataloader.js" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-WS-253.30387.83" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="40409312-64fd-471a-9e58-a6b17d52e2e8" name="Changes" comment="" />
+      <created>1770107268374</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1770107268374</updated>
+      <workItem from="1770107270947" duration="312000" />
+      <workItem from="1770186908958" duration="1512000" />
+      <workItem from="1770711489951" duration="50000" />
+      <workItem from="1770712032654" duration="95000" />
+      <workItem from="1770712146039" duration="182000" />
+      <workItem from="1770712344509" duration="366000" />
+      <workItem from="1770712725642" duration="251000" />
+      <workItem from="1771396822170" duration="1762000" />
+      <workItem from="1771423718000" duration="769000" />
+      <workItem from="1771497527641" duration="447000" />
+      <workItem from="1771498004751" duration="2121000" />
+      <workItem from="1771914217959" duration="1670000" />
+      <workItem from="1773642169303" duration="3178000" />
+      <workItem from="1773660626353" duration="66000" />
+      <workItem from="1773729540007" duration="2661000" />
+      <workItem from="1773755929222" duration="2440000" />
+      <workItem from="1773900563474" duration="911000" />
+      <workItem from="1773910607047" duration="3000" />
+      <workItem from="1773910773951" duration="190000" />
+      <workItem from="1773915650023" duration="1521000" />
+      <workItem from="1774862981683" duration="552000" />
+      <workItem from="1774863783727" duration="132000" />
+      <workItem from="1774934207183" duration="136000" />
+      <workItem from="1774936344287" duration="4513000" />
+      <workItem from="1774941105518" duration="65000" />
+      <workItem from="1776751972120" duration="5145000" />
+      <workItem from="1777357219222" duration="5459000" />
+      <workItem from="1777401056196" duration="44000" />
+      <workItem from="1777401213259" duration="513000" />
+      <workItem from="1777645375531" duration="13118000" />
+    </task>
+    <task id="LOCAL-00001" summary="Poga">
+      <option name="closed" value="true" />
+      <created>1770201903745</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1770201903745</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Pievienoju laika līnijas uzmetumu">
+      <option name="closed" value="true" />
+      <created>1771398452032</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1771398452032</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Tiku vaļā no scrollbar">
+      <option name="closed" value="true" />
+      <created>1771425284009</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1771425284009</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Piestrādāju pie UI">
+      <option name="closed" value="true" />
+      <created>1771500129923</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1771500129923</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Divi notikumi tagad var atrasties vienā dienā">
+      <option name="closed" value="true" />
+      <created>1773660353729</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1773660353729</updated>
+    </task>
+    <task id="LOCAL-00006" summary="loadToday funkcijas uzlabojumi">
+      <option name="closed" value="true" />
+      <created>1773732212259</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1773732212259</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Mazi uzlabojumi">
+      <option name="closed" value="true" />
+      <created>1773756474434</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1773756474434</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Mazi uzlabojumi">
+      <option name="closed" value="true" />
+      <created>1773761167827</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1773761167827</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Labojumi filtru funkcijai">
+      <option name="closed" value="true" />
+      <created>1773901453107</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1773901453107</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Adding comments">
+      <option name="closed" value="true" />
+      <created>1773919765514</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1773919765526</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Atjaunoju dataloader faila funkcijas">
+      <option name="closed" value="true" />
+      <created>1774863464127</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1774863464127</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Mazi labojumi">
+      <option name="closed" value="true" />
+      <created>1774937189159</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1774937189159</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Mazi labojumi">
+      <option name="closed" value="true" />
+      <created>1774937628204</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1774937628204</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Uzlaboju noformējumu">
+      <option name="closed" value="true" />
+      <created>1776756798917</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1776756798917</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Salaboju laika līnijas vizuālo ielādi">
+      <option name="closed" value="true" />
+      <created>1777361177913</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1777361177913</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Atguvu daļu no vecās funkcionalitātes">
+      <option name="closed" value="true" />
+      <created>1777664420153</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1777664420153</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Poga" />
+    <MESSAGE value="Pievienoju laika līnijas uzmetumu" />
+    <MESSAGE value="Tiku vaļā no scrollbar" />
+    <MESSAGE value="Piestrādāju pie UI" />
+    <MESSAGE value="Divi notikumi tagad var atrasties vienā dienā" />
+    <MESSAGE value="loadToday funkcijas uzlabojumi" />
+    <MESSAGE value="Mazi uzlabojumi" />
+    <MESSAGE value="Labojumi filtru funkcijai" />
+    <MESSAGE value="Adding comments" />
+    <MESSAGE value="Atjaunoju dataloader faila funkcijas" />
+    <MESSAGE value="Mazi labojumi" />
+    <MESSAGE value="Uzlaboju noformējumu" />
+    <MESSAGE value="Salaboju laika līnijas vizuālo ielādi" />
+    <MESSAGE value="Atguvu daļu no vecās funkcionalitātes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Atguvu daļu no vecās funkcionalitātes" />
+  </component>
+</project>
