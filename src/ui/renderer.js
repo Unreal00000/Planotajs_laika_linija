@@ -200,18 +200,24 @@ function renderTimeline(data, filter) {
     days.forEach(item => {
         if (typeof item === "number") {
             const marker = document.createElement("div");
-            marker.textContent = new Date(item * 1000).toString().slice(0, 15);
+            const title = document.createElement("div");
+            title.className = "timelineElement_name";
+            title.textContent = new Date(item * 1000).toString().slice(0, 15);
+            title.style.top = "42%"
             marker.style.fontWeight = "normal";
             marker.style.fontSize = "16px";
 
             if (item < todayUnix) marker.className = "timelineElement_past";
-            else if (item === todayUnix) marker.className = "timelineElement_today";
+            else if (item === todayUnix) {
+                marker.className = "timelineElement_today";
+                todayTaskBox.push(marker);
+            }
             else marker.className = "timelineElement";
 
+            marker.appendChild(title);
             timelineContainer.appendChild(marker);
         } else {
             const card = createCard(item);
-
             card.style.width = "20%"
 
             const itemUnix = Math.floor(new Date(item.date).getTime() / 1000);
@@ -254,7 +260,12 @@ function renderRelevant(data, filter) {
 
 // ================= TODAY =================
 function renderToday(data, filter) {
-    todayContainer.innerHTML = "";
+    Array.from(todayContainer.children).forEach(child => {
+        if (child !== todayContainer_sub) {
+            todayContainer.removeChild(child);
+        }
+    });
+    todayContainer_sub.innerHTML = "";
 
     const todayString = new Date().toISOString().split("T")[0];
 
@@ -264,44 +275,91 @@ function renderToday(data, filter) {
         passesFilter(e, filter)
     );
 
-    // 🔥 Virsraksts
-    const title = document.createElement("h2");
-    title.textContent = "Šodienas notikumi";
-    title.style.textAlign = "center";
-    todayContainer.appendChild(title);
+    // ================= BLANK =================
+    function addBlank(sub) {
+        const blank = document.createElement("div");
+        blank.className = "todayElement_blank";
 
-    // Ja nav notikumu
-    if (todayEvents.length === 0) {
-        const empty = document.createElement("p");
-        empty.textContent = "Nav notikumu";
-        empty.style.textAlign = "center";
-        todayContainer.appendChild(empty);
-        return;
-    }
-
-    // 🔥 Notikumu saraksts (bez kastītēm)
-    todayEvents.forEach(item => {
-        const wrapper = document.createElement("div");
-
-        // nosaukums (centrēts)
-        const name = document.createElement("div");
-        name.textContent = item.title;
-        name.style.textAlign = "center";
-        name.style.fontWeight = "bold";
-        name.style.marginTop = "10px";
-
-        wrapper.appendChild(name);
-
-        // apraksts (pa kreisi)
-        if (item.description) {
-            const desc = document.createElement("div");
-            desc.textContent = item.description;
-            desc.style.textAlign = "left";
-            desc.style.margin = "5px 10px";
-
-            wrapper.appendChild(desc);
+        if (sub) {
+            todayContainer_sub.appendChild(blank);
+        } else {
+            blank.style.height = "1%"
+            todayContainer.appendChild(blank);
         }
 
-        todayContainer.appendChild(wrapper);
+    }
+
+    // ================= HEADER =================
+    function addHeader(text, tags = []) {
+        const TDE_H = document.createElement("div");
+        TDE_H.className = "todayElement_headerContainer";
+
+        function addDecor(bool) {
+            const D1 = document.createElement("div");
+            D1.className = "todayDecoration_1";
+
+            const usedTags = [];
+            const tagsArray = bool ? [...tags] : [...tags].reverse();
+
+            if (tagsArray.length > 0) {
+                tagsArray.forEach(tag => {
+                    if (usedTags.includes(tag)) return;
+
+                    const color = getTagColor(tag);
+                    if (color) {
+                        const TE = document.createElement("div");
+                        TE.className = "tagElement";
+                        TE.style.backgroundColor = color;
+                        D1.appendChild(TE);
+                    }
+
+                    usedTags.push(tag);
+                });
+            } else {
+                D1.style.backgroundColor = getTagColor(null);
+            }
+
+            TDE_H.appendChild(D1);
+        }
+
+        addDecor(true);
+
+        const TDE_HC = document.createElement("div");
+        TDE_HC.textContent = text;
+        TDE_HC.className = "todayElement_header";
+        TDE_H.appendChild(TDE_HC);
+
+        addDecor(false);
+        todayContainer_sub.appendChild(TDE_H);
+    }
+
+    // ================= RENDER =================
+    //addBlank(false);
+    addBlank(true);
+
+    const title = document.createElement("h2");
+    title.style.textAlign = "center";
+    title.style.fontSize = "xx-large"
+
+    if (todayEvents.length === 0) {
+        title.textContent = "Šodien notikumu nav!";
+        todayContainer.appendChild(title);
+        return;
+    } else {
+        title.textContent = "Šodienas notikumi:";
+        todayContainer.appendChild(title);
+    }
+
+    todayEvents.forEach(item => {
+        addHeader(item.title, item.tag ? [item.tag] : []);
+
+        if (item.description && item.description.length > 0) {
+            const TDE_T = document.createElement("div");
+            TDE_T.textContent = item.description;
+            TDE_T.className = "todayElement_text";
+            todayContainer_sub.appendChild(TDE_T);
+        }
+
+        addBlank(true);
     });
 }
