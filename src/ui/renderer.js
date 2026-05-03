@@ -1,6 +1,7 @@
 const timelineContainer = document.getElementById("timelineContainer");
 const relevantContainer = document.getElementById("relevantContainer");
 const todayContainer = document.getElementById("todayContainer");
+const todayContainer_sub = document.getElementById("todayContainer_sub");
 
 const daysPast = 365;
 const daysFuture = 365;
@@ -54,26 +55,56 @@ function transformScroll(event) {
     event.preventDefault()
 }
 
-// ================= TAG COLORS (random per tag) =================
-const tagColorMap = {};
+// ================= TAG COLORS =================
+const defaultTagColors = {
+    "no tag": "rgb(0, 0, 0)",
+    "tag_1": "rgb(255, 0, 0)",
+    "tag_2": "rgb(0, 166, 255)",
+    "tag_3": "rgb(102, 0, 255)",
+};
+
+const tagColorMap = (() => {
+    try {
+        const saved = localStorage.getItem("tagColorMap");
+        return saved ? { ...JSON.parse(saved), ...defaultTagColors } : { ...defaultTagColors };
+    } catch {
+        return { ...defaultTagColors };
+    }
+})();
+
+function saveTagColorMap() {
+    try {
+        localStorage.setItem("tagColorMap", JSON.stringify(tagColorMap));
+    } catch {
+        console.warn("Could not save tag colors to localStorage");
+    }
+}
 
 function getTagColor(tag) {
-    if (!tag) return "black";
+    if (!tag) return tagColorMap["no tag"] || "rgb(0, 0, 0)";
 
     const normalized = tag.toLowerCase();
 
     if (!tagColorMap[normalized]) {
-        tagColorMap[normalized] =
-            "#" + Math.floor(Math.random() * 16777215).toString(16);
+        // Generate random color for unknown tags and persist it
+        tagColorMap[normalized] = "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, "0");
+        saveTagColorMap();
     }
 
     return tagColorMap[normalized];
 }
 
 // ================= FILTER =================
+// function passesFilter(item, filter) {
+//     if (!filter) return true;
+//     return (item.tag || "").toLowerCase() === filter.toLowerCase();
+// }
+
 function passesFilter(item, filter) {
     if (!filter) return true;
-    return (item.tag || "").toLowerCase() === filter.toLowerCase();
+    if (!item.tag) return false;
+    const tags = Array.isArray(item.tag) ? item.tag : [item.tag];
+    return tags.some(t => t.toLowerCase() === filter.toLowerCase());
 }
 
 // ================= DATE HELPERS =================
@@ -116,11 +147,26 @@ function createCard(item) {
     const tagStrip = document.createElement("div");
     tagStrip.className = "tagContainer";
 
-    const tagBlock = document.createElement("div");
-    tagBlock.className = "tagElement";
-    tagBlock.style.backgroundColor = getTagColor(item.tag);
+    // const tagBlock = document.createElement("div");
+    // tagBlock.className = "tagElement";
+    // tagBlock.style.backgroundColor = getTagColor(item.tag);
 
-    tagStrip.appendChild(tagBlock);
+    const tags = Array.isArray(item.tag) ? item.tag : item.tag ? [item.tag] : [];
+
+    if (tags.length === 0) {
+        const tagBlock = document.createElement("div");
+        tagBlock.className = "tagElement";
+        tagBlock.style.backgroundColor = getTagColor(null); // returns "no tag" color
+        tagStrip.appendChild(tagBlock);
+    } else {
+        tags.forEach(tag => {
+            const tagBlock = document.createElement("div");
+            tagBlock.className = "tagElement";
+            tagBlock.style.backgroundColor = getTagColor(tag);
+            tagStrip.appendChild(tagBlock);
+        });
+    }
+
     card.appendChild(tagStrip);
 
     // ================= TITLE =================
@@ -154,6 +200,7 @@ function createCard(item) {
 
 // ================= MAIN RENDER =================
 export function renderAll(data, filter) {
+    //localStorage.clear()
     renderTimeline(data, filter);
     renderRelevant(data, filter);
     renderToday(data, filter);
@@ -350,7 +397,7 @@ function renderToday(data, filter) {
     }
 
     todayEvents.forEach(item => {
-        addHeader(item.title, item.tag ? [item.tag] : []);
+        addHeader(item.title, Array.isArray(item.tag) ? item.tag : item.tag ? [item.tag] : []);
 
         if (item.description && item.description.length > 0) {
             const TDE_T = document.createElement("div");

@@ -98,4 +98,19 @@ router.post("/edit", (req, res) => {
     );
 });
 
+// RESET
+router.post("/reset", (req, res) => {
+    db.run("DELETE FROM events", function (err) {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        db.run("DELETE FROM tags", function (err2) {
+            if (err2) {
+                return res.status(500).json({ error: err2.message });
+            }
+            res.json({ ok: true });
+        });
+    });
+});
+
 module.exports = router;
