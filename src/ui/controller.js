@@ -16,6 +16,7 @@ let currentFilter = null;
 // ================= INIT =================
 
 async function init() {
+    // await fetch("/api/events/reset", { method: "POST" });
     await loadTags();                 // 🔥 svarīgi
     data = await getEvents();
     renderAll(data, currentFilter);
