@@ -1,3 +1,5 @@
+//await fetch("/api/events/reset", { method: "POST" });
+
 const timelineContainer = document.getElementById("timelineContainer");
 const relevantContainer = document.getElementById("relevantContainer");
 const todayContainer = document.getElementById("todayContainer");
@@ -95,16 +97,21 @@ function getTagColor(tag) {
 }
 
 // ================= FILTER =================
-// function passesFilter(item, filter) {
-//     if (!filter) return true;
-//     return (item.tag || "").toLowerCase() === filter.toLowerCase();
-// }
-
 function passesFilter(item, filter) {
-    if (!filter) return true;
-    if (!item.tag) return false;
-    const tags = Array.isArray(item.tag) ? item.tag : [item.tag];
-    return tags.some(t => t.toLowerCase() === filter.toLowerCase());
+    if (!filter || filter.tags.length === 0) return true;
+
+    const itemTags = Array.isArray(item.tags) ? item.tags : item.tags ? [item.tags] : [];
+    const normalizedItem = itemTags.map(t => t.toLowerCase());
+    const normalizedFilter = filter.tags.map(t => t.toLowerCase());
+
+    const matches = filter.matchMode === "all"
+        ? normalizedFilter.every(t => normalizedItem.includes(t))
+        : filter.matchMode === "exact"
+            ? normalizedFilter.length === normalizedItem.length &&
+            normalizedFilter.every(t => normalizedItem.includes(t))
+            : normalizedFilter.some(t => normalizedItem.includes(t));
+
+    return filter.filterMode === "exclude" ? !matches : matches;
 }
 
 // ================= DATE HELPERS =================
@@ -151,7 +158,7 @@ function createCard(item) {
     // tagBlock.className = "tagElement";
     // tagBlock.style.backgroundColor = getTagColor(item.tag);
 
-    const tags = Array.isArray(item.tag) ? item.tag : item.tag ? [item.tag] : [];
+    const tags = Array.isArray(item.tags) ? item.tags : item.tags ? [item.tags] : [];
 
     if (tags.length === 0) {
         const tagBlock = document.createElement("div");
@@ -209,12 +216,16 @@ export function renderAll(data, filter) {
 // ================= TIMELINE =================
 function renderTimeline(data, filter) {
     if (firstTime_T) {
-        timelineContainer.addEventListener('wheel', transformScroll)
-        firstTime_T = false
+        timelineContainer.addEventListener('wheel', transformScroll);
+        firstTime_T = false;
     }
 
     timelineContainer.innerHTML = "";
     todayTaskBox = [];
+
+    const showPast    = !filter || filter.showPast    !== false ? true  : filter.showPast;
+    const showMarkers = !filter || filter.showMarkers !== false ? true  : filter.showMarkers;
+    const reversed    = !filter || filter.reversed    !== true  ? false : filter.reversed;
 
     const [data_t] = separateAndSortData(data);
     let days = getCalendarDays(data_t);
@@ -222,7 +233,7 @@ function renderTimeline(data, filter) {
     data_t
         .filter(e => passesFilter(e, filter))
         .forEach(item => {
-            const itemUnix = Math.floor(new Date(item.date).getTime() / 1000); // convert here
+            const itemUnix = Math.floor(new Date(item.date).getTime() / 1000);
 
             const index = days.findIndex(day =>
                 typeof day === "number" &&
@@ -244,8 +255,15 @@ function renderTimeline(data, filter) {
             }
         });
 
+    if (reversed) days.reverse();
+
     days.forEach(item => {
         if (typeof item === "number") {
+            // skip past day markers if showPast is false
+            if (!showPast && item < todayUnix) return;
+            // skip empty markers if showMarkers is false
+            if (!showMarkers) return;
+
             const marker = document.createElement("div");
             const title = document.createElement("div");
             title.className = "timelineElement_name";
@@ -263,10 +281,13 @@ function renderTimeline(data, filter) {
             marker.appendChild(title);
             timelineContainer.appendChild(marker);
         } else {
-            const card = createCard(item);
-            card.style.width = "20%"
-
+            // skip past events if showPast is false
             const itemUnix = Math.floor(new Date(item.date).getTime() / 1000);
+            if (!showPast && itemUnix < todayUnix) return;
+
+            const card = createCard(item);
+            card.style.width = "20%";
+
             if (itemUnix >= todayUnix && itemUnix < todayUnix + 86400) {
                 todayTaskBox.push(card);
             }
@@ -290,18 +311,23 @@ function renderTimeline(data, filter) {
 // ================= RELEVANT =================
 function renderRelevant(data, filter) {
     if (firstTime_R) {
-        relevantContainer.addEventListener('wheel', transformScroll)
-        firstTime_R = false
+        relevantContainer.addEventListener('wheel', transformScroll);
+        firstTime_R = false;
     }
 
     relevantContainer.innerHTML = "";
 
-    data
+    const reversed = filter?.reversed === true;
+
+    let items = data
         .filter(e => !e.date)
-        .filter(e => passesFilter(e, filter))
-        .forEach(item => {
-            relevantContainer.appendChild(createCard(item));
-        });
+        .filter(e => passesFilter(e, filter));
+
+    if (reversed) items.reverse();
+
+    items.forEach(item => {
+        relevantContainer.appendChild(createCard(item));
+    });
 }
 
 // ================= TODAY =================
@@ -397,7 +423,7 @@ function renderToday(data, filter) {
     }
 
     todayEvents.forEach(item => {
-        addHeader(item.title, Array.isArray(item.tag) ? item.tag : item.tag ? [item.tag] : []);
+        addHeader(item.title, Array.isArray(item.tags) ? item.tags : item.tags ? [item.tags] : []);
 
         if (item.description && item.description.length > 0) {
             const TDE_T = document.createElement("div");

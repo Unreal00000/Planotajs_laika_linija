@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS events (
     title TEXT,
     date TEXT,
     description TEXT,
-    tag TEXT
+    tags TEXT DEFAULT '[]'
 )
 `);
 
@@ -24,7 +24,16 @@ CREATE TABLE IF NOT EXISTS tags (
 // GET
 router.get("/", (req, res) => {
     db.all("SELECT * FROM events", (err, rows) => {
-        res.json({ events: rows });
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+
+        const events = rows.map(row => ({
+            ...row,
+            tags: JSON.parse(row.tags || "[]")
+        }));
+
+        res.json({ events });
     });
 });
 
@@ -36,11 +45,12 @@ router.get("/tags", (req, res) => {
 
 // ADD
 router.post("/add", (req, res) => {
-    const { title, date, description, tag } = req.body;
+    const { title, date, description, tags } = req.body;
+    const tagsString = JSON.stringify(tags ?? []);  // ["tag1", "tag2"] → string
 
     db.run(
-        "INSERT INTO events (title, date, description, tag) VALUES (?, ?, ?, ?)",
-        [title, date, description, tag],
+        "INSERT INTO events (title, date, description, tags) VALUES (?, ?, ?, ?)",
+        [title, date, description, tagsString],
         function (err) {
             if (err) {
                 console.error("DB INSERT ERROR:", err);
@@ -65,7 +75,6 @@ router.post("/delete", (req, res) => {
 });
 
 //TAG
-
 router.post("/tags/add", (req, res) => {
     const { name } = req.body;
 
@@ -84,11 +93,12 @@ router.post("/tags/add", (req, res) => {
 
 // EDIT
 router.post("/edit", (req, res) => {
-    const { id, title, date, description, tag } = req.body;
+    const { id, title, date, description, tags } = req.body;
+    const tagsString = JSON.stringify(tags ?? []);
 
     db.run(
-        `UPDATE events SET title=?, date=?, description=?, tag=? WHERE id=?`,
-        [title, date, description, tag, id],
+        `UPDATE events SET title=?, date=?, description=?, tags=? WHERE id=?`,
+        [title, date, description, tagsString, id],
         function (err) {
             if (err) {
                 return res.status(500).json({ error: err.message });
@@ -100,15 +110,25 @@ router.post("/edit", (req, res) => {
 
 // RESET
 router.post("/reset", (req, res) => {
-    db.run("DELETE FROM events", function (err) {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-        db.run("DELETE FROM tags", function (err2) {
-            if (err2) {
-                return res.status(500).json({ error: err2.message });
-            }
-            res.json({ ok: true });
+    db.run("DROP TABLE IF EXISTS events", function (err) {
+        if (err) return res.status(500).json({ error: err.message });
+
+        db.run(`
+            CREATE TABLE events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT,
+                date TEXT,
+                description TEXT,
+                tags TEXT DEFAULT '[]'
+            )
+        `, function (err2) {
+            if (err2) return res.status(500).json({ error: err2.message });
+
+            db.run("DELETE FROM tags", function (err3) {
+                if (err3) return res.status(500).json({ error: err3.message });
+
+                res.json({ ok: true });
+            });
         });
     });
 });

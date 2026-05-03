@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="40409312-64fd-471a-9e58-a6b17d52e2e8" name="Changes" comment="Jauns dizains">
+    <list default="true" id="40409312-64fd-471a-9e58-a6b17d52e2e8" name="Changes" comment="Mēģinājums salabot tagus">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/events.db" beforeDir="false" afterPath="$PROJECT_DIR$/events.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/logic/routes/events.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/logic/routes/events.js" afterDir="false" />
@@ -179,7 +179,7 @@
       <workItem from="1777357219222" duration="5459000" />
       <workItem from="1777401056196" duration="44000" />
       <workItem from="1777401213259" duration="513000" />
-      <workItem from="1777645375531" duration="21915000" />
+      <workItem from="1777645375531" duration="28329000" />
     </task>
     <task id="LOCAL-00001" summary="Poga">
       <option name="closed" value="true" />
@@ -325,7 +325,15 @@
       <option name="project" value="LOCAL" />
       <updated>1777796108492</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Mēģinājums salabot tagus">
+      <option name="closed" value="true" />
+      <created>1777801463418</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1777801463418</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -358,6 +366,7 @@
     <MESSAGE value="Salaboju laika līnijas vizuālo ielādi" />
     <MESSAGE value="Atguvu daļu no vecās funkcionalitātes" />
     <MESSAGE value="Jauns dizains" />
-    <option name="LAST_COMMIT_MESSAGE" value="Jauns dizains" />
+    <MESSAGE value="Mēģinājums salabot tagus" />
+    <option name="LAST_COMMIT_MESSAGE" value="Mēģinājums salabot tagus" />
   </component>
 </project>
