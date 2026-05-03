@@ -11,7 +11,14 @@ import { renderAll } from "./renderer.js";
 
 let data = [];
 let tags = [];
-let currentFilter = null;
+let currentFilter = {
+    tags: [],
+    matchMode: "any",
+    filterMode: "include",
+    reversed: false,
+    showMarkers: true,
+    showPast: false
+};
 
 // ================= INIT =================
 
@@ -55,9 +62,9 @@ window.addEvent = async function () {
     if (dateInput) date = dateInput;
 
     // 🔥 TAG IZVĒLE
-    let tag = null;
+    let selectedTags = [];
 
-    let message = "Izvēlies tagu:\n";
+    let message = "Izvēlies tagus (atdali ar '/'):\n";
 
     tags.forEach((t, i) => {
         message += `${i + 1} - ${t.name}\n`;
@@ -68,16 +75,29 @@ window.addEvent = async function () {
     const choice = prompt(message);
 
     if (choice !== null) {
-        const index = parseInt(choice);
+        const input = choice.trim();
 
-        if (index === 0) {
-            tag = null;
-        } else if (index > 0 && index <= tags.length) {
-            tag = tags[index - 1].name;
+        if (input === "0") {
+            selectedTags = [];
+        } else {
+            const choices = input.split("/").map(c => c.trim());
+
+            selectedTags = choices
+                .map(c => {
+                    const index = parseInt(c);
+                    if (!isNaN(index) && index > 0 && index <= tags.length) {
+                        return tags[index - 1].name;
+                    }
+                    return null;
+                })
+                .filter(Boolean);
         }
+    } else {
+        selectedTags = [];
     }
 
-    await addEventAPI({ title, date, description, tag });
+    //console.log(selectedTags);
+    await addEventAPI({ title, date, description, tags: selectedTags });
     await refresh();
 };
 
@@ -99,9 +119,9 @@ window.editEvent = async function (id) {
     const date = prompt("Jauns datums YYYY-MM-DD:", event.date || "");
     const description = prompt("Jauns apraksts:", event.description || "");
 
-    let tag = null;
+    let selectedTags = [];
 
-    let message = "Izvēlies jaunu tagu:\n";
+    let message = "Izvēlies jaunus tagus (atdali ar '/'):\n";
 
     tags.forEach((t, i) => {
         message += `${i + 1} - ${t.name}\n`;
@@ -109,16 +129,36 @@ window.editEvent = async function (id) {
 
     message += "0 - Bez taga";
 
-    const choice = prompt(message);
+    const indices = event.tags
+        .map(tagName => {
+            const index = tags.findIndex(t => t.name === tagName);
+            return index !== -1 ? index + 1 : null;
+        })
+        .filter(Boolean)
+        .join("/");
+
+    const choice = prompt(message, indices || "");
 
     if (choice !== null) {
-        const index = parseInt(choice);
+        const input = choice.trim();
 
-        if (index === 0) {
-            tag = null;
-        } else if (index > 0 && index <= tags.length) {
-            tag = tags[index - 1].name;
+        if (input === "0") {
+            selectedTags = [];
+        } else {
+            const choices = input.split("/").map(c => c.trim());
+
+            selectedTags = choices
+                .map(c => {
+                    const index = parseInt(c);
+                    if (!isNaN(index) && index > 0 && index <= tags.length) {
+                        return tags[index - 1].name;
+                    }
+                    return null;
+                })
+                .filter(Boolean);
         }
+    } else {
+        selectedTags = [];
     }
 
     await editEventAPI({
@@ -126,7 +166,7 @@ window.editEvent = async function (id) {
         title,
         date: date || null,
         description: description || null,
-        tag
+        tags: selectedTags
     });
 
     await refresh();
@@ -135,22 +175,64 @@ window.editEvent = async function (id) {
 // ================= FILTER =================
 
 window.filterTag = function () {
-    let message = "Izvēlies tagu:\n";
-
+    // ================= STEP 1: SELECT TAGS =================
+    let message = "Izvēlies tagus (atdali ar '/'):\n";
     tags.forEach((t, i) => {
         message += `${i + 1} - ${t.name}\n`;
     });
+    message += "\nAtstāj tukšu, lai izlaistu tagu filtru";
 
-    message += "0 - Visi";
+    const tagChoice = prompt(message);
+    if (tagChoice === null) return;
 
-    const choice = prompt(message);
+    const selectedTags = tagChoice.trim() === ""
+        ? []
+        : tagChoice.split("/").map(c => {
+            const index = parseInt(c.trim()) - 1;
+            return tags[index]?.name || null;
+        }).filter(Boolean);
 
-    if (choice === "0") {
-        currentFilter = null;
-    } else {
-        const index = parseInt(choice) - 1;
-        currentFilter = tags[index]?.name || null;
+    // ================= STEP 2: MATCH MODE =================
+    let matchMode = "any";
+    if (selectedTags.length > 0) {
+        const matchChoice = prompt("Atbilstības režīms:\n1 - Vismaz viens tags (noklusējums)\n2 - Visi tagi\n3 - Precīza atbilstība");
+        if (matchChoice === null) return;
+        if (matchChoice === "2") matchMode = "all";
+        if (matchChoice === "3") matchMode = "exact";
     }
+
+    // ================= STEP 3: INCLUDE / EXCLUDE =================
+    let filterMode = "include";
+    if (selectedTags.length > 0) {
+        const includeChoice = prompt("Filtra režīms:\n1 - Iekļaut notikumus ar šiem tagiem (noklusējums)\n2 - Izslēgt notikumus ar šiem tagiem");
+        if (includeChoice === null) return;
+        if (includeChoice === "2") filterMode = "exclude";
+    }
+
+    // ================= STEP 4: ORDER DIRECTION =================
+    const orderChoice = prompt("Secība:\n1 - Normāla (noklusējums)\n2 - Apgriezta");
+    if (orderChoice === null) return;
+    const reversed = orderChoice === "2";
+
+    // ================= STEP 5: EMPTY DAY MARKERS =================
+    const markersChoice = prompt("Tukšās dienas:\n1 - Rādīt (noklusējums)\n2 - Slēpt");
+    if (markersChoice === null) return;
+    const showMarkers = markersChoice !== "2";
+
+    // ================= STEP 6: PAST EVENTS =================
+    const pastChoice = prompt("Pagātnes notikumi:\n1 - Slēpt (noklusējums)\n2 - Rādīt");
+    if (pastChoice === null) return;
+    const showPast = pastChoice === "2";
+
+    // ================= APPLY =================
+    currentFilter = {
+        tags: selectedTags,
+        matchMode,
+        filterMode,
+        reversed,
+        showMarkers,
+        showPast
+    };
 
     renderAll(data, currentFilter);
 };
@@ -158,7 +240,14 @@ window.filterTag = function () {
 // ================= RESET FILTER =================
 
 window.resetFilter = function () {
-    currentFilter = null;
+    currentFilter = {
+        tags: [],
+        matchMode: "any",
+        filterMode: "include",
+        reversed: false,
+        showMarkers: true,
+        showPast: false
+    };
     renderAll(data, currentFilter);
 };
 
