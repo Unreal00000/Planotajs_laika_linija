@@ -203,7 +203,6 @@ function renderTimeline(data, filter) {
             const title = document.createElement("div");
             title.className = "timelineElement_name";
             title.textContent = new Date(item * 1000).toString().slice(0, 15);
-            title.style.top = "42%"
             marker.style.fontWeight = "normal";
             marker.style.fontSize = "16px";
 
