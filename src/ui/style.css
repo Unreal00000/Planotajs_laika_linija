@@ -12,22 +12,22 @@ body {
 
 /* TimeLine */
 .timelineContainer {display:flex; container-type:scroll-state; white-space:nowrap; overflow-y:hidden; overflow-x:auto; background-color: rgb(255, 255, 255); height:35%; width:50%; position:absolute; top:16%; left:10%; border-radius:20px}
-.timelineElement {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:94%; width:8%; background-color: rgb(0, 235, 255); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%; font-size: 20px; font-weight: bold; text-wrap: wrap; cursor:pointer;}
-.timelineElement:hover {background-color: rgb(142, 255, 235)}
+.timelineElement {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:94%; width:8%; background-color: rgb(179, 183, 188); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%; font-size: 20px; font-weight: bold; text-wrap: wrap; cursor:pointer; overflow-wrap: break-word; word-break: break-word; hyphens: auto; white-space: normal;}
+.timelineElement:hover {background-color: rgb(216, 219, 221)}
 .timelineElement:active {background-color: rgb(255, 255, 255)}
-.timelineElement_past {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:97%; width:8%; background-color: rgb(128, 128, 128); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%; font-size: 20px; font-weight: bold; text-wrap: wrap; cursor:pointer;}
-.timelineElement_past:hover {background-color: rgb(175, 175, 175)}
+.timelineElement_past {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:97%; width:8%; background-color: rgb(79, 102, 115); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%; font-size: 20px; font-weight: bold; text-wrap: wrap; cursor:pointer; overflow-wrap: break-word; word-break: break-word; hyphens: auto; white-space: normal;}
+.timelineElement_past:hover {background-color: rgb(118, 131, 136)}
 .timelineElement_past:active {background-color: rgb(255, 255, 255)}
-.timelineElement_today {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:97%; width:8%; background-color: rgb(255, 208, 0); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%; font-size: 20px; font-weight: bold; text-wrap: wrap; cursor:pointer;}
-.timelineElement_today:hover {background-color: rgb(255, 232, 135)}
+.timelineElement_today {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:97%; width:8%; background-color: rgb(255, 234, 0); position:relative; top:0%; left:0%; border-radius:20px; margin:0.3%; font-size: 20px; font-weight: bold; text-wrap: wrap; cursor:pointer; overflow-wrap: break-word; word-break: break-word; hyphens: auto; white-space: normal;}
+.timelineElement_today:hover {background-color: rgb(255, 239, 88)}
 .timelineElement_today:active {background-color: rgb(255, 255, 255)}
 .timelineElement_date {display: block; height: 10%; width: 100%; position: absolute; left: 0%; bottom: 0%; font-size: 16px; text-align: center}
-.timelineElement_name {display: block; height: 10%; width: 100%; position: absolute; left: 0%; top: 46%; font-size: 20px; text-align: center}
+.timelineElement_name {display: block; width: 100%; position: absolute; left: 0%; top: 50%; transform: translateY(-50%); font-size: 20px; text-align: center}
 
 /* Relevant */
 .relevantContainer {display:flex; container-type:scroll-state; white-space:nowrap; overflow-y:hidden; overflow-x:auto; background-color: rgb(255, 255, 255); height:35%; width:80%; position:absolute; top:55%; left:10%; border-radius:20px}
-.relevantElement {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:97%; width:20%; background-color: rgb(55, 255, 0); position:relative; top:0%; left:0.2%; border-radius:20px; margin:0.2%; font-size: 20px; font-weight: bold; text-wrap: wrap; cursor:pointer;}
-.relevantElement:hover {background-color: rgb(174, 255, 87)}
+.relevantElement {display:inline-block; flex: 0 0 auto; overflow: hidden; border:3px solid black; height:97%; width:20%; background-color: rgb(179, 183, 188); position:relative; top:0%; left:0.2%; border-radius:20px; margin:0.2%; font-size: 20px; font-weight: bold; text-wrap: wrap; cursor:pointer; overflow-wrap: break-word; word-break: break-word; hyphens: auto; white-space: normal;}
+.relevantElement:hover {background-color: rgb(216, 219, 221)}
 .relevantElement:active {background-color: rgb(255, 255, 255)}
 
 /* Today */

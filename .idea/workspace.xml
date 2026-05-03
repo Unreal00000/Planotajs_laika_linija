@@ -7,7 +7,6 @@
     <list default="true" id="40409312-64fd-471a-9e58-a6b17d52e2e8" name="Changes" comment="Atguvu daļu no vecās funkcionalitātes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/events.db" beforeDir="false" afterPath="$PROJECT_DIR$/events.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ui/code.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/code.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/renderer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/renderer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/style.css" afterDir="false" />
     </list>
@@ -19,7 +18,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Roberts" />
+        <entry key="$PROJECT_DIR$" value="Roberts_WebStorm" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -65,32 +64,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Batch.run_docker.executor": "Run",
-    "Docker.Dockerfile.executor": "Run",
-    "JavaScript Debug.code.html (1).executor": "Run",
-    "JavaScript Debug.code.html.executor": "Run",
-    "Node.js.dataloader.js.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "Roberts__WebStorm",
-    "javascript.preferred.runtime.type.id": "node",
-    "junie.onboarding.icon.badge.shown": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "to.speed.mode.migration.done": "true",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2025.3.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Batch.run_docker.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript Debug.code.html (1).executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript Debug.code.html.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.dataloader.js.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Marcis&quot;,
+    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2025.3.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Batch.run_docker">
     <configuration name="run_docker" type="BatchConfigurationType" factoryName="Batch" temporary="true">
       <module name="Planotajs_laika_linija" />
@@ -129,10 +128,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Batch.run_docker" />
-        <item itemvalue="JavaScript Debug.code.html (1)" />
+        <item itemvalue="Node.js.dataloader.js" />
         <item itemvalue="JavaScript Debug.code.html" />
         <item itemvalue="Docker.Dockerfile" />
-        <item itemvalue="Node.js.dataloader.js" />
+        <item itemvalue="Batch.run_docker" />
       </list>
     </recent_temporary>
   </component>
@@ -179,7 +178,7 @@
       <workItem from="1777357219222" duration="5459000" />
       <workItem from="1777401056196" duration="44000" />
       <workItem from="1777401213259" duration="513000" />
-      <workItem from="1777645375531" duration="13118000" />
+      <workItem from="1777645375531" duration="16738000" />
     </task>
     <task id="LOCAL-00001" summary="Poga">
       <option name="closed" value="true" />
@@ -309,7 +308,15 @@
       <option name="project" value="LOCAL" />
       <updated>1777664420153</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Atguvu daļu no vecās funkcionalitātes">
+      <option name="closed" value="true" />
+      <created>1777710757548</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1777710757548</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
